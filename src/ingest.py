@@ -8,51 +8,49 @@ from langchain_chroma import Chroma
 
 load_dotenv()
 
-# Cambiamos el nombre a main para que app.py lo encuentre fácil
 def main():
-    print("📂 Cargando base de conocimientos desde data/...")
+    # Usamos /tmp para evitar conflictos de permisos y versiones en la nube
+    persist_dir = "/tmp/vector_db"
+    
+    print("📂 Iniciando proceso de ingesta en /tmp/vector_db...")
     
     if not os.path.exists("data"):
         os.makedirs("data")
-        print("📁 Carpeta 'data' creada. Coloca tus archivos ahí.")
+        print("📁 Carpeta 'data' creada. Asegúrate de tener archivos ahí.")
         return
 
-    # Cargamos archivos .txt y .pdf
+    # Carga de archivos
     txt_loader = DirectoryLoader('data/', glob="./*.txt", loader_cls=TextLoader)
     pdf_loader = DirectoryLoader('data/', glob="./*.pdf", loader_cls=PyPDFLoader)
-    
     raw_documents = txt_loader.load() + pdf_loader.load()
     
-    if len(raw_documents) == 0:
-        print("❌ No se encontraron documentos.")
+    if not raw_documents:
+        print("❌ Error: No se encontraron documentos en la carpeta 'data/'.")
         return
 
-    print(f"   └── Fuentes encontradas: {len(raw_documents)}")
-
-    # 2. División de texto
+    # Fragmentación
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_documents(raw_documents)
 
-    # 3. Embeddings
+    # Configuración de Embeddings
     api_key = os.getenv("GOOGLE_API_KEY")
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001", 
         google_api_key=api_key
     )
     
-    # 4. Guardar en base de datos vectorial
-    print("🧠 Generando vectores y guardando en ChromaDB...")
-    
-    # Limpieza de seguridad para evitar el error de "_type"
-    if os.path.exists("vector_db"):
-        shutil.rmtree("vector_db")
+    # Limpieza absoluta para matar el error _type
+    if os.path.exists(persist_dir):
+        shutil.rmtree(persist_dir)
 
+    # Creación de la base de datos vectorial
+    print(f"🧠 Generando vectores para {len(chunks)} fragmentos...")
     Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
-        persist_directory="vector_db"
+        persist_directory=persist_dir
     )
-    print("✅ ¡Ingesta completada!")
+    print("✅ Ingesta completada con éxito en el servidor.")
 
 if __name__ == "__main__":
     main()
