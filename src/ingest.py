@@ -8,7 +8,8 @@ from langchain_chroma import Chroma
 
 load_dotenv()
 
-def ingest_documents():
+# Cambiamos el nombre a main para que app.py lo encuentre fácil
+def main():
     print("📂 Cargando base de conocimientos desde data/...")
     
     if not os.path.exists("data"):
@@ -23,7 +24,7 @@ def ingest_documents():
     raw_documents = txt_loader.load() + pdf_loader.load()
     
     if len(raw_documents) == 0:
-        print("❌ No se encontraron documentos. Agrega tu archivo .txt a la carpeta data/.")
+        print("❌ No se encontraron documentos.")
         return
 
     print(f"   └── Fuentes encontradas: {len(raw_documents)}")
@@ -32,7 +33,7 @@ def ingest_documents():
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_documents(raw_documents)
 
-    # 3. Configuración de Embeddings (Modelo validado: gemini-embedding-001)
+    # 3. Embeddings
     api_key = os.getenv("GOOGLE_API_KEY")
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001", 
@@ -41,15 +42,17 @@ def ingest_documents():
     
     # 4. Guardar en base de datos vectorial
     print("🧠 Generando vectores y guardando en ChromaDB...")
+    
+    # Limpieza de seguridad para evitar el error de "_type"
     if os.path.exists("vector_db"):
         shutil.rmtree("vector_db")
 
     Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
-        persist_directory="vector_db/"
+        persist_directory="vector_db"
     )
-    print("✅ ¡Ingesta completada! Base de conocimientos lista en 'vector_db/'.")
+    print("✅ ¡Ingesta completada!")
 
 if __name__ == "__main__":
-    ingest_documents()
+    main()
