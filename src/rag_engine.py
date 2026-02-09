@@ -23,18 +23,23 @@ def get_rag_chain():
         embedding_function=embeddings
     )
 
-    # 3. Setup LLM
+    # 3. Setup LLM (Asegúrate de que el modelo sea gemini-1.5-flash si el 2.0 da error)
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        temperature=0,
+        model="gemini-2.5-flash", 
+        temperature=0, # Crucial: 0 evita que la IA se ponga creativa
         google_api_key=api_key
     )
 
-    # 4. Prompt
+    # 4. Prompt Reforzado (Aquí es donde matamos las alucinaciones)
     template = """
-    You are 'Immigrasmart', an expert AI Visa Consultant for the Czech Republic.
-    Use the following pieces of retrieved context to answer the user's question.
-    If the answer is not in the context, say you don't know based on official documents.
+    You are 'Immigrasmart', a strict and professional AI Visa Consultant for the Czech Republic.
+    Your mission is to provide information based ONLY on the provided legal context.
+
+    STRICT RULES:
+    1. If the information is not present in the CONTEXT below, you must say: "I am sorry, but I do not have official information regarding this in my current database."
+    2. Do NOT use your general knowledge about other countries or general immigration rules.
+    3. Always stick to the facts, dates, and fees mentioned in the context.
+    4. If the user asks about a country other than the Czech Republic, politely decline to answer.
 
     CONTEXT:
     {context}
@@ -47,13 +52,13 @@ def get_rag_chain():
     
     prompt = ChatPromptTemplate.from_template(template)
 
-    # 5. Build the Chain using LCEL (Bypassing langchain.chains)
+    # 5. Build the Chain using LCEL
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
 
-    retriever = vector_db.as_retriever(search_kwargs={"k": 3})
+    # Aumentamos k a 5 para que tenga más documentos donde buscar la verdad
+    retriever = vector_db.as_retriever(search_kwargs={"k": 5})
 
-    # This is the modern chain structure
     rag_chain = (
         {"context": retriever | format_docs, "input": RunnablePassthrough()}
         | prompt
