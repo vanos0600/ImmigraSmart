@@ -10,51 +10,56 @@ from langchain_chroma import Chroma
 load_dotenv()
 
 def main():
+    # Usamos /tmp para Linux/Streamlit Cloud
     persist_dir = "/tmp/vector_db"
     print("📂 Iniciando proceso de ingesta robusta...")
     
     if not os.path.exists("data"):
         os.makedirs("data")
+        print("📁 Carpeta 'data' creada. Pon tus archivos ahí.")
         return
 
+    # Carga de documentos
     txt_loader = DirectoryLoader('data/', glob="./*.txt", loader_cls=TextLoader)
     pdf_loader = DirectoryLoader('data/', glob="./*.pdf", loader_cls=PyPDFLoader)
     raw_documents = txt_loader.load() + pdf_loader.load()
     
     if not raw_documents:
-        print("❌ No hay documentos.")
+        print("❌ No hay documentos en 'data/'.")
         return
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=50)
+    # Fragmentación más pequeña (500) para procesar rápido
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = text_splitter.split_documents(raw_documents)
 
     api_key = os.getenv("GOOGLE_API_KEY")
+    
+    # Configuración de Embeddings con alta tolerancia al tiempo (Timeout)
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001", 
-        google_api_key=api_key
+        google_api_key=api_key,
+        task_type="retrieval_document"
     )
     
     if os.path.exists(persist_dir):
         shutil.rmtree(persist_dir)
 
-    # Ingesta por bloques para evitar el Error 504
-    print(f"🧠 Generando vectores para {len(chunks)} fragmentos en bloques...")
+    print(f"🧠 Generando vectores para {len(chunks)} fragmentos en bloques pequeños...")
     
-    # Creamos la base de datos con el primer bloque
+    # Ingesta por bloques de 5 con pausas de 2 segundos para evitar Error 504
     vector_db = Chroma.from_documents(
-        documents=chunks[:10],
+        documents=chunks[:5],
         embedding=embeddings,
         persist_directory=persist_dir
     )
     
-    # Añadimos el resto con pausas
-    for i in range(10, len(chunks), 10):
-        batch = chunks[i:i+10]
+    for i in range(5, len(chunks), 5):
+        batch = chunks[i:i+5]
         vector_db.add_documents(batch)
         print(f"   --- Procesados {i+len(batch)} de {len(chunks)}...")
-        time.sleep(1) # Pausa de seguridad
+        time.sleep(2) # Pausa de seguridad para la API de Google
 
-    print("✅ Ingesta completada con éxito.")
+    print("✅ Ingesta completada con éxito en /tmp/vector_db.")
 
 if __name__ == "__main__":
     main()

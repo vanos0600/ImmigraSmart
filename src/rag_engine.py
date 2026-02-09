@@ -10,20 +10,19 @@ load_dotenv()
 
 def get_rag_chain():
     api_key = os.getenv("GOOGLE_API_KEY")
-    persist_dir = "/tmp/vector_db" # Debe coincidir con ingest.py
+    persist_dir = "/tmp/vector_db"
     
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001",
         google_api_key=api_key
     )
 
-    # Carga de la base de datos desde la ruta temporal de Linux
     vector_db = Chroma(
         persist_directory=persist_dir,
         embedding_function=embeddings
     )
 
-    # Usando el modelo más avanzado: Gemini 2.0 Flash
+    # Modelo Gemini 2.0 Flash
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash", 
         temperature=0, 
@@ -31,9 +30,8 @@ def get_rag_chain():
     )
 
     template = """
-    You are 'Immigrasmart', the most advanced AI Visa Consultant for the Czech Republic.
-    Answer the question ONLY based on the following context. 
-    If you don't know the answer, state that official records don't contain that information.
+    You are 'Immigrasmart', a professional AI Visa Consultant for the Czech Republic.
+    Use ONLY the provided context to answer. If the answer is not there, say you don't know.
 
     CONTEXT:
     {context}
