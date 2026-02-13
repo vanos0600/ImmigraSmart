@@ -12,11 +12,11 @@ load_dotenv()
 def main():
     # Usamos /tmp para Linux/Streamlit Cloud
     persist_dir = "/tmp/vector_db"
-    print("📂 Starting injection...")
+    print("Starting injection...")
     
     if not os.path.exists("data"):
         os.makedirs("data")
-        print("📁 Repositroy created 'data'. Add your files.")
+        print("Repositroy created 'data'. Add your files.")
         return
 
     # Carga de documentos
@@ -25,11 +25,11 @@ def main():
     raw_documents = txt_loader.load() + pdf_loader.load()
     
     if not raw_documents:
-        print("❌ Not cuments found in 'data/'.")
+        print("Not cuments found in 'data/'.")
         return
 
     # Fragmentación más pequeña (500) para procesar rápido
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
     chunks = text_splitter.split_documents(raw_documents)
 
     api_key = os.getenv("GOOGLE_API_KEY")
@@ -44,7 +44,7 @@ def main():
     if os.path.exists(persist_dir):
         shutil.rmtree(persist_dir)
 
-    print(f"🧠 Generating vector {len(chunks)} ...")
+    print(f"Generating vector {len(chunks)} ...")
     
     # Ingesta por bloques de 5 con pausas de 2 segundos para evitar Error 504
     vector_db = Chroma.from_documents(
@@ -59,7 +59,7 @@ def main():
         print(f"   --- Processed {i+len(batch)} de {len(chunks)}...")
         time.sleep(2) # Pausa de seguridad para la API de Google
 
-    print("✅ Ingest completed successfully /tmp/vector_db.")
+    print("Ingest completed successfully /tmp/vector_db.")
 
 if __name__ == "__main__":
     main()

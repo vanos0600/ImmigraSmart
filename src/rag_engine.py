@@ -47,7 +47,7 @@ def get_rag_chain():
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
 
-    retriever = vector_db.as_retriever(search_kwargs={"k": 5})
+    retriever = vector_db.as_retriever(search_kwargs={"k": 10})
 
     rag_chain = (
         {"context": retriever | format_docs, "input": RunnablePassthrough()}

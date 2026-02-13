@@ -1,242 +1,97 @@
 ================================================================================
-IMMIGRASMART KNOWLEDGE BASE: CZECH REPUBLIC STUDENT VISA & RESIDENCE
+IMMIGRASMART CORE KNOWLEDGE BASE: CZECH REPUBLIC IMMIGRATION (VER. 2026.1)
 ================================================================================
 
-SECTION 1: OBLIGATIONS AFTER ARRIVAL
-Source: Ministry of the Interior of the Czech Republic - Information for Students
+SECTION 1: ARRIVAL & BIOMETRICS (OAMP/MOI)
+Source: Ministry of the Interior (MVČR) - Official 2026 Guidelines
 
-1. REPORTING ARRIVAL
-   - Within 3 working days of entering the Czech Republic, all foreign students arriving to receive a long-term residence permit must report to the Ministry of the Interior (MOI) office in person.
-   - This visit is for carrying out activities associated with issuing a biometric residence card. You can report your arrival at the same time.
+1. REPORTING ARRIVAL (Non-EU)
+   - Deadline: Within 3 working days of entering the Czech Republic.
+   - Action: All foreign students must report in person to the Ministry of the Interior (MOI/OAMP) office.
+   - Purpose: Collection of biometric data (facial image + fingerprints).
 
-2. COLLECTING RESIDENCE CARD
-   - Students applying for a long-term residence permit must present themselves at the Ministry to collect the residence card within the specified limit, but at latest within 60 days of the biometric data being collected.
+2. RESIDENCE CARD COLLECTION
+   - Students must collect their biometric residence card within 60 days of the data collection. Failure to collect the card may lead to the cancellation of the residence permit.
 
-SECTION 2: EXTENDING YOUR STAY
-Source: Ministry of the Interior of the Czech Republic
+3. FOREIGN POLICE REGISTRATION (EU & Non-EU)
+   - Non-EU Students: Mandatory registration within 3 working days (usually handled at the OAMP during biometrics).
+   - EU Students: Must register with the Foreign Police within 30 days if staying longer than 30 days.
 
-1. WHEN TO APPLY
-   - An application for extending a long-term visa or long-term residence permit can be filed:
-     * Earliest: 90 days before the current permit expires.
-     * Latest: 14 days before the current permit expires.
-   - Recommendation: File at the beginning of this period, especially before holidays.
+SECTION 2: EXTENDING YOUR RESIDENCE PERMIT
+Source: Act No. 326/1999 Coll. on the Residence of Foreign Nationals
 
-2. DOCUMENTATION
-   - It is not necessary to submit all documents immediately with the application form; you can complete the documentation subsequently (to stop the deadline).
-   - Medical travel insurance proof must cover the ENTIRE period of the requested stay.
+1. FILING WINDOWS (Strict Deadlines)
+   - Earliest: 90 days before current permit expiration.
+   - Latest: Last day of current permit validity (Note: Previously it was 14 days, but currently the MOI accepts applications until the last day to prevent illegal stay).
+   - Recommendation: Apply at least 30 days before expiry to avoid processing delays.
 
-3. TRAVELLING DURING PROCEEDINGS
-   - If you plan to leave the CR during the extension process, inform the MOI.
-   - Provide a contact address or a Power of Attorney (person representing you) to pick up mail.
+2. THE "BRIDGE LABEL" (Překlenovací štítek)
+   - Purpose: If your visa expires while an extension is being processed, you must request this physical stamp in your passport at the OAMP office. 
+   - Travel: It allows you to travel outside the Czech Republic and re-enter legally during the "pending" period.
 
-SECTION 3: OTHER CRITICAL OBLIGATIONS
-Source: Ministry of the Interior of the Czech Republic
+SECTION 3: FINANCIAL REQUIREMENTS (PROOF OF FUNDS 2026)
+Source: MVČR - Official 2026 Existential Minimum Standards
 
-1. REPORTING CHANGES
-   - You must report changes within 3 working days (usually) for:
-     * Change of address.
-     * Change of travel document (passport).
-     * Change of family status (marriage, etc.).
-     * Change of surname.
+1. CALCULATION FORMULA (Existential Minimum = 3,130 CZK)
+   - First Month: 15 times the existential minimum (15 x 3,130 = 46,950 CZK).
+   - Each Additional Month: 2 times the existential minimum (2 x 3,130 = 6,260 CZK).
 
-2. RETURNING CARDS
-   - If your residence card is no longer valid or you finish your stay, you must return the card to the MOI.
+2. REQUIRED TOTAL AMOUNTS FOR 2026/2027
+   - 1 Semester (6 months): 78,250 CZK (approx. €3,100 / $3,350).
+   - 1 Academic Year (12 months): 115,810 CZK (approx. €4,600 / $5,000).
+   - Minors (Under 18): Only required to prove 50% of these amounts.
 
-SECTION 4: LONG-TERM RESIDENCE FOR STUDY PURPOSE
-Source: Information for University Students
+    The 2026 Financial FormulaThe required amount is calculated using the Existential Minimum, which for 2026 remains set at 3,130 CZK.First Month: 15 times the existential minimum ($15 \times 3,130 = 46,950$ CZK).Each Additional Month: 2 times the existential minimum ($2 \times 3,130 = 6,260$ CZK).🧮 Calculation for a 10-Month StayIf you are planning to stay for 10 months, the calculation is as follows:Month 1: $15 \times 3,130 = 46,950$ CZKMonths 2 to 10 (9 months): $9 \times (2 \times 3,130) = 56,340$ CZKTotal Amount: $46,950 + 56,340 =$ 103,290 CZKNote: For a full academic year (12 months), the standard amount requested by the Ministry of the Interior (OAMP) is 115,810 CZK.
 
-1. ELIGIBILITY
-   - Studies in an accredited study programme at a university.
-   - Language and specialized preparation for an accredited university programme organized by a public university.
+3. ACCEPTED PROOF
+   - Personal Bank Statement: Must be in the student's name + Copy of an international debit card (Visa/Mastercard).
+   - Scholarship Confirmation: Must state the specific monthly amount.
+   - Sponsorship: Notarized letter + Sponsor's bank statements + Official Czech translation.
 
-2. REQUIRED DOCUMENTS
-   - Valid travel document (Passport).
-   - Proof of purpose of stay (Confirmation of study/acceptance from the University).
-   - Proof of accommodation:
-     * Dormitory: Contract or confirmation.
-     * Rental flat: Rental contract (owner's name + your name).
-     * Sub-rental: Contract + Owner's consent.
-     * Owned flat: Extract from land register.
-   - Proof of funds:
-     * Bank account statement (international card if foreign bank).
-     * Proof of income/employment.
-     * Scholarship confirmation.
-   - 1 Photograph.
-   - Proof of medical insurance (Comprehensive healthcare insurance with a company in CR, unless covered by EHIC/Erasmus).
+SECTION 4: HEALTH INSURANCE & DOCUMENTS
+Source: Ministry of Health & MVČR Requirements
 
-SECTION 5: VISA-FREE STAY (EU STUDENTS & ERASMUS)
-Source: Information for University Students
+1. COMPREHENSIVE INSURANCE (Mandatory)
+   - Only "Comprehensive Healthcare Insurance" (Komplexní pojištění) is accepted for long-term stays.
+   - Authorized Providers: Pojišťovna VZP (PVZP) is the primary provider. "Emergency" or foreign insurance is NOT valid for extensions inside the CR.
 
-- If you hold a long-term residence permit/visa for study purposes issued by another EU member state (e.g., Germany, Poland), you may stay in the Czech Republic for up to 1 year WITHOUT a Czech visa if:
-  * You are participating in an exchange programme (like ERASMUS).
-  * Your permit bears the note "Student" and the name of the exchange programme.
+2. DOCUMENT VALIDITY
+   - All supporting documents (Bank statements, Study confirmations, Accommodation contracts) must NOT be older than 180 days at the time of submission.
+   - Passports must be valid for at least 3 months beyond the intended stay.
 
-SECTION 6: SEEKING EMPLOYMENT AFTER GRADUATION
-Source: Information for University Students
+SECTION 5: ADMINISTRATIVE EXPULSION & NEW 2026 RULES
+Source: Act No. 326/1999 Coll. (Amended 2026)
 
-1. ELIGIBILITY
-   - Students who successfully completed university education in the Czech Republic holding a long-term residence for study purposes.
+1. REPEATED OFFENCES (New for 2026)
+   - Effective Jan 1, 2026, a residence permit can be revoked or not extended if the foreigner repeatedly commits administrative offences (e.g., disturbing public order, noise violations, or minor traffic offences). "Repeated" is defined as 3 or more offences within 12 months.
 
-2. DURATION
-   - You can apply for a long-term residence for 9 MONTHS to look for a job or start a business.
-
-3. REQUIREMENTS
-   - Valid travel document.
-   - Certificate of successful completion of university studies (Diploma/Confirmation).
-   - Proof of accommodation.
-   - Proof of funds.
-   - Medical insurance.
-
-   EXPANDED CZECH IMMIGRATION KNOWLEDGE: BUREAUCRACY & SOLUTIONS
-1. THE CRITICAL TIMELINE & "STUDENT MODE"
-Common Problem: Starting Too Late. Many students underestimate that gathering documents (translations, apostilles) can take 1–2 months before even securing an appointment.
-
-The 60-Day Myth: While the legal processing time for a student residence permit is 60 days, in reality, it can take 4–6 months depending on the season and embassy workload.
-
-Solution: Režim Student (Student Mode). This is a government facilitation program that accelerates access to appointments at the embassy for selected students.
-
-How to use: You cannot apply for this yourself; your Czech university must nominate you. Contact your university's international office immediately after admission to ask if they participate.
-
-2. THE STUDENT VISA INTERVIEW (EMBASSY STAGE)
-Most students from third countries face a face-to-face interview. It is not just a formality; it tests your "true intentions".
-
-Common Problem: Nervousness or Vague Answers. Consular officers look for discrepancies between your documents and your verbal answers.
-
-Key Topics to Prepare:
-
-Course Knowledge: Detailed subjects you will study, hours per week (usually 35), and start/end dates.
-
-Motivation: Why Czechia instead of your home country or other EU states?.
-
-Nostrification: Be prepared to explain the process of getting your previous degree recognized in Czechia.
-
-Future Plans: Be honest but focused on finishing studies; avoiding "I want to move there permanently" is often safer unless specifically asked.
-
-3. NOSTRIFICATION (RECOGNITION OF EDUCATION)
-Common Problem: The "Vicious Circle." You cannot enroll without nostrification, and sometimes you cannot get a visa without enrollment.
-
-Solution: Some universities now have "Institutional Accreditation," allowing them to recognize your previous education internally for the purpose of admission, bypassing the lengthy regional authority process. Check if your university has this privilege.
-
-4. DOCUMENTATION ERRORS & REJECTIONS
-Problem: Outdated Documents. Documents (except passports) must not be older than 180 days at the time of submission.
-
-Problem: Translation & Legalization. Using unofficial translators or missing an Apostille will lead to immediate rejection or suspension of the application.
-
-Solution: The 15-Day Appeal. If rejected, you have exactly 15 days from the day you receive the decision to file a written appeal (in Czech).
-
-5. POST-ARRIVAL BUREAUCRACY (MOI & OAMP)
-The "Bridge Label" (Překlenovací štítek): If your visa expires while your extension is still being processed, you must request this physical stamp in your passport to travel outside the Czech Republic legally.
-
-Health Insurance Confusion: Students often mistakenly buy "Emergency" insurance. For a long-term stay, only Comprehensive medical insurance (Pojišťovna VZP) is accepted.
-
-IMMIGRASMART KNOWLEDGE BASE: STUDENT VISAS AND OBLIGATIONS (CZECH REPUBLIC)
-1. OBLIGATIONS OF STUDENTS
-Registration with Foreign Police: Both non-EU and EU students must register with the Foreign Police after arrival if the accommodation provider has not done so.
-
-Biometric Residence Card: All foreign students arriving for a long-term residence permit must report in person to the MOI (Ministry of the Interior) office within 3 working days of entry to the Czech Republic for biometric data processing.
-
-Reporting Changes: Students from both EU and non-EU countries must report any changes regarding their stay, including changes in address, travel documents, or family status.
-
-Departure and Representation: Students applying for or extending a residence permit who plan to leave the CR during proceedings should inform the MOI and provide a contact address or a power of attorney representative.
-
-Returning Residence Cards: Students must return their biometric residence cards before ending their stay in the Czech Republic.
-
-Official Resource: For additional immigration issues, follow www.immigrationportal.cz and the official guide at Study in Czechia.
-
-2. OBLIGATIONS OF EDUCATIONAL INSTITUTIONS
-Reporting Non-Attendance: Higher education establishments must inform the MOI in writing if a long-term visa holder does not start, cancels, or finishes their studies (§ 107 Act on Residence of Foreign Nationals).
-
-MOI Contact Details:
-
-Address: Ministerstvo vnitra, odbor azylové a migrační politiky, Nad Štolou 3, poštovní schránka 21, 170 34 Praha 7.
-
-Data Box ID: 6bnaawp.
-
-Mobility Notification: Universities must notify the MOI regarding the start, interruption, or termination of studies for foreigners holding residence permits from other EU states under mobility programs.
-
-Completion Documents: Universities are obliged to issue proof of successful study completion for those applying for job-search or business-start residence permits.
-
-3. VISA TYPES AND APPLICATION PURPOSES
-Stays Longer Than 90 Days (Long-term)
-§ 42d (Long-term Residence Permit for Studies): For students intending to stay longer than 3 months for accredited study programs, language/professional preparation organized by public universities, or specific exchange programs.
-
-§ 30/1 (Long-term Visa for Studies): Similar requirements to § 42d; for stays longer than 3 months.
-
-§ 30/1 (Long-term Visa for "Other"): For educational activities not meeting the strict definition of "studies" (e.g., secondary education not in an exchange program, unaccredited programs, or certain private language courses).
-
-Stays Shorter Than 90 Days (Short-term)
-Visa Required: Students from countries with visa requirements must apply for a short-term Schengen visa for "studies" or "other".
-
-Visa-Free: Foreigners who do not need a visa for the Schengen area can study for up to 90 days without a visa.
-
-4. APPLICATION PROCEDURES AND FEES
-Filing Location: Generally filed at the Czech Embassy in the applicant's country of citizenship or residence. Extensions or follow-up applications are filed at MOI offices within the Czech Republic.
-
-In-Person Requirement: Applicants must file in person unless a waiver is granted by the embassy.
-
-Administrative Fees:
-
-Residence Permit for Studies (Embassy): CZK 500.
-
-Residence Card (inside CR): CZK 1,000.
-
-Long-term Visa (Studies): Exempt from consular fees.
-
-Long-term Visa ("Other"): CZK 2,500.
-
-Accommodation Confirmation: Electronic confirmation is possible via Data Box (ID: 6bnaawp) or secure electronic signature sent to posta@mvcr.cz, but only for applications filed at regional MOI branches inside the CR. Embassy filings require paper forms for rental agreements.
-
-
-SECTION 7: ADMINISTRATIVE EXPULSION & DEPORTATION
-Source: Act on the Residence of Foreign Nationals (No. 326/1999 Coll.) & Ministry of the Interior (MOI)
-
-1. ADMINISTRATIVE EXPULSION (Deportation Order)
-Administrative expulsion is a decision that terminates a foreigner's stay in the Czech Republic and sets a period for departure, accompanied by a re-entry ban to the EU (Schengen Area) for a specific duration.
-
-Common Grounds for Expulsion (Students):
-
-Invalid Documents: Staying in the CR without a valid travel document or a valid visa/residence permit.
-
-Illegal Employment: Working without a work permit or in contradiction to the issued permit (Note: Full-time students have free access to the labor market, but must remain primary students).
-
-Failure to Leave: Not leaving the CR after the "Exit Order" (Výjezdní příkaz) has expired.
-
-Forged Documents: Presenting altered or forged documents during immigration proceedings.
-
-Duration of Re-entry Bans:
-
-Up to 3 Years: For illegal stay or working without authorization.
-
-Up to 5 Years: If the foreigner endangers public health (infectious diseases) or seriously violates stay requirements.
-
-Up to 10 Years: If the foreigner endangers state security or public order.
-
-2. CANCELLATION OF RESIDENCE PERMIT (Revocation)
-The MOI can cancel a long-term visa or residence permit before its expiration if the student fails to meet their obligations.
-
-Most Common Reason for Students: Failure to fulfill the purpose of stay. If a student stops attending university or is expelled from school, the university is legally obliged to report this to the MOI.
-
-Criminal Records: Being convicted of an intentional criminal offense.
-
-Insolvency: Failure to prove sufficient funds or health insurance upon request.
+2. GROUNDS FOR DEPORTATION
+   - Invalid residence (overstaying).
+   - Forged documents.
+   - Illegal employment (working without being a student).
+   - Failure to meet the "Purpose of Stay" (e.g., expelled from university).
 
 3. THE EXIT ORDER (Výjezdní příkaz)
-If your visa application is rejected or your residence is cancelled, you will receive an Exit Order stamp in your passport.
+   - Validity: Usually 30 days.
+   - Constraint: You CANNOT travel to other Schengen countries. It is for leaving the CR only.
 
-Validity: Usually valid for 30 days (maximum 60 days).
+SECTION 6: LEGAL APPEALS & DATA BOX
+Source: Information Portal for Foreigners (ipc.gov.cz)
 
-Legal Status: It is a non-renewable temporary permit that ONLY allows you to leave the country. You cannot travel to other Schengen states with an Exit Order.
+1. FILING AN APPEAL (Rejection)
+   - Deadline: Exactly 15 days from the day after the decision was delivered.
+   - Suspensive Effect: An appeal usually allows you to stay in the CR until the decision is final, PROVIDED it was a renewal/extension application.
 
-Overstaying an Exit Order: This leads directly to administrative expulsion and a ban from the entire Schengen area.
+2. THE "DATA BOX" (Datová schránka)
+   - Highly recommended for students (Free at Czech POINT).
+   - Legal Fact: Messages are considered "delivered" 10 days after sent, even if not opened.
+   - Benefit: Instant notification of missing documents or approval.
 
-4. VOLUNTARY RETURN PROGRAM
-For foreigners who have overstayed but wish to avoid the stigma of a forced deportation (and potentially shorten their re-entry ban), the MOI offers "Voluntary Returns." The state may, in some cases, assist with the cost of the ticket back to the country of origin.
+SECTION 7: POST-GRADUATION (JOB SEEKING)
+   - Graduates of Czech universities can apply for a 9-month residence permit to find a job or start a business.
+   - Requirements: Diploma/Study completion certificate + Proof of funds (SECTION 3) + Insurance (SECTION 4).
 
-5. THE RIGHT TO APPEAL (Legal Defense)
-Timeline: You typically have 15 days to appeal a decision of administrative expulsion or visa cancellation.
-
-Suspensive Effect: In many (but not all) cases, filing an appeal allows the student to remain in the CR legally until the court or the Ministry's Commission (Komise) makes a final decision.
-
-Warning: An appeal against an Exit Order usually does NOT have a suspensive effect.
-
-IMMIGRASMART KNOWLEDGE BASE: CZECH REPUBLIC STUDENT IMMIGRATIONStatus: Official Guide (Updated for 2026 Requirements)SECTION 8: FINANCIAL REQUIREMENTS (PROOF OF FUNDS)Source: Ministry of the Interior (MVČR) – 2026 Calculation StandardsTo obtain a student visa or residence permit, you must prove you have sufficient financial resources. The calculation is based on the Existential Minimum, which for 2026 is set at 3,130 CZK per month for immigration purposes.1. Official Calculation FormulaFirst month: 15 times the existential minimum ($15 \times 3,130 = 46,950$ CZK).Each additional month: 2 times the existential minimum ($2 \times 3,130 = 6,260$ CZK).2. Required Amounts for 2026/2027Stay DurationTotal Amount (CZK)Approx. EURApprox. USD1 Semester (6 months)78,250 CZK€3,100$3,3501 Full Year (12 months)115,810 CZK€4,600$5,000Note for Minors: Applicants under 18 years of age are required to prove only half of the amounts listed above.3. Accepted Proof of FundsBank Account Statement: Must be in your name. If the bank is outside the Czech Republic, you must possess an internationally recognized payment card (Visa/Mastercard) associated with that account.Scholarship Confirmation: Official document stating the amount and duration of the scholarship.Sponsorship: A notarized letter from a sponsor (e.g., parents) accompanied by their bank statements and an official Czech translation.SECTION 9: HANDLING VISA REJECTIONS & PROBLEMSSource: Act No. 326/1999 Coll., on the Residence of Foreign NationalsIf your application is rejected or your residence permit is cancelled, you have specific legal rights and very strict deadlines.1. The Right to AppealDeadline: You have exactly 15 days from the day after you receive the written decision to file an appeal.Where to file: The appeal must be submitted to the Ministry of the Interior (MOI) office or the Embassy that issued the decision. It can be sent by post or via Data Box.Suspensive Effect: If you appeal a rejection of a permit extension while inside the CR, you are usually allowed to stay legally until a final decision is made (request a Bridge Label).2. Common Grounds for RejectionOutdated Documents: All documents (except your passport) must not be older than 180 days at the time of submission.Incorrect Insurance: For long-term stays, only Comprehensive Healthcare Insurance from an authorized Czech company (primarily PVZP) is accepted.Translation Issues: Every foreign document must be translated by a Czech-certified translator (official round-stamp).3. The Exit Order (Výjezdní příkaz)If your appeal is rejected or you decide not to appeal, you will receive an Exit Order stamp in your passport.Validity: Usually 30 days.Constraint: You can only use it to leave the country. You cannot travel to other Schengen states with an Exit Order.Risk: Overstaying an Exit Order leads to Administrative Expulsion (Deportation) and a ban from the entire Schengen Area for up to 3 years.SECTION 10: ADMINISTRATIVE OBLIGATIONS & "DATA BOX"Best Practice for Students1. Reporting ArrivalNon-EU Students: Must report to the MOI/OAMP office within 3 working days of arrival to start the biometric residence card process.EU Students: Must register with the Foreign Police within 30 days if staying longer than 30 days.2. The "Data Box" (Datová schránka)It is highly recommended for students to open a Data Box (free at any Czech POINT office).Why? The Ministry sends all official letters (notifications, requests for missing documents) digitally. This ensures you never miss a deadline due to mail delivery issues or moving apartments.Legal Weight: A message in a Data Box is legally equivalent to a certified letter delivered in person.CONTACTS FOR IMMIGRATION ASSISTANCEMOI Information Line: (+420) 974 801 801 (English/Czech).Official Immigration Portal: frs.gov.cz.Study in Czechia Official Site: studyinczechia.cz.
+OFFICIAL CONTACTS:
+- MOI Info Line: (+420) 974 801 801
+- Web: frs.gov.cz / ipc.gov.cz
+- Legal Aid (Free): SIMI (migrace.com) or OPU (opu.cz)
