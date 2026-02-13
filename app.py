@@ -13,7 +13,7 @@ DB_PATH = "/tmp/vector_db"
 
 # 1. AUTO-INGESTA
 if not os.path.exists(DB_PATH):
-    with st.spinner("🚀 Initializing Knowledge Base (this takes 1-2 mins)..."):
+    with st.spinner("Initializing Knowledge Base (this takes 1-2 mins)..."):
         try:
             from src.ingest import main as run_ingest
             run_ingest()

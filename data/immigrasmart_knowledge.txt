@@ -185,3 +185,58 @@ Long-term Visa (Studies): Exempt from consular fees.
 Long-term Visa ("Other"): CZK 2,500.
 
 Accommodation Confirmation: Electronic confirmation is possible via Data Box (ID: 6bnaawp) or secure electronic signature sent to posta@mvcr.cz, but only for applications filed at regional MOI branches inside the CR. Embassy filings require paper forms for rental agreements.
+
+
+SECTION 7: ADMINISTRATIVE EXPULSION & DEPORTATION
+Source: Act on the Residence of Foreign Nationals (No. 326/1999 Coll.) & Ministry of the Interior (MOI)
+
+1. ADMINISTRATIVE EXPULSION (Deportation Order)
+Administrative expulsion is a decision that terminates a foreigner's stay in the Czech Republic and sets a period for departure, accompanied by a re-entry ban to the EU (Schengen Area) for a specific duration.
+
+Common Grounds for Expulsion (Students):
+
+Invalid Documents: Staying in the CR without a valid travel document or a valid visa/residence permit.
+
+Illegal Employment: Working without a work permit or in contradiction to the issued permit (Note: Full-time students have free access to the labor market, but must remain primary students).
+
+Failure to Leave: Not leaving the CR after the "Exit Order" (Výjezdní příkaz) has expired.
+
+Forged Documents: Presenting altered or forged documents during immigration proceedings.
+
+Duration of Re-entry Bans:
+
+Up to 3 Years: For illegal stay or working without authorization.
+
+Up to 5 Years: If the foreigner endangers public health (infectious diseases) or seriously violates stay requirements.
+
+Up to 10 Years: If the foreigner endangers state security or public order.
+
+2. CANCELLATION OF RESIDENCE PERMIT (Revocation)
+The MOI can cancel a long-term visa or residence permit before its expiration if the student fails to meet their obligations.
+
+Most Common Reason for Students: Failure to fulfill the purpose of stay. If a student stops attending university or is expelled from school, the university is legally obliged to report this to the MOI.
+
+Criminal Records: Being convicted of an intentional criminal offense.
+
+Insolvency: Failure to prove sufficient funds or health insurance upon request.
+
+3. THE EXIT ORDER (Výjezdní příkaz)
+If your visa application is rejected or your residence is cancelled, you will receive an Exit Order stamp in your passport.
+
+Validity: Usually valid for 30 days (maximum 60 days).
+
+Legal Status: It is a non-renewable temporary permit that ONLY allows you to leave the country. You cannot travel to other Schengen states with an Exit Order.
+
+Overstaying an Exit Order: This leads directly to administrative expulsion and a ban from the entire Schengen area.
+
+4. VOLUNTARY RETURN PROGRAM
+For foreigners who have overstayed but wish to avoid the stigma of a forced deportation (and potentially shorten their re-entry ban), the MOI offers "Voluntary Returns." The state may, in some cases, assist with the cost of the ticket back to the country of origin.
+
+5. THE RIGHT TO APPEAL (Legal Defense)
+Timeline: You typically have 15 days to appeal a decision of administrative expulsion or visa cancellation.
+
+Suspensive Effect: In many (but not all) cases, filing an appeal allows the student to remain in the CR legally until the court or the Ministry's Commission (Komise) makes a final decision.
+
+Warning: An appeal against an Exit Order usually does NOT have a suspensive effect.
+
+IMMIGRASMART KNOWLEDGE BASE: CZECH REPUBLIC STUDENT IMMIGRATIONStatus: Official Guide (Updated for 2026 Requirements)SECTION 8: FINANCIAL REQUIREMENTS (PROOF OF FUNDS)Source: Ministry of the Interior (MVČR) – 2026 Calculation StandardsTo obtain a student visa or residence permit, you must prove you have sufficient financial resources. The calculation is based on the Existential Minimum, which for 2026 is set at 3,130 CZK per month for immigration purposes.1. Official Calculation FormulaFirst month: 15 times the existential minimum ($15 \times 3,130 = 46,950$ CZK).Each additional month: 2 times the existential minimum ($2 \times 3,130 = 6,260$ CZK).2. Required Amounts for 2026/2027Stay DurationTotal Amount (CZK)Approx. EURApprox. USD1 Semester (6 months)78,250 CZK€3,100$3,3501 Full Year (12 months)115,810 CZK€4,600$5,000Note for Minors: Applicants under 18 years of age are required to prove only half of the amounts listed above.3. Accepted Proof of FundsBank Account Statement: Must be in your name. If the bank is outside the Czech Republic, you must possess an internationally recognized payment card (Visa/Mastercard) associated with that account.Scholarship Confirmation: Official document stating the amount and duration of the scholarship.Sponsorship: A notarized letter from a sponsor (e.g., parents) accompanied by their bank statements and an official Czech translation.SECTION 9: HANDLING VISA REJECTIONS & PROBLEMSSource: Act No. 326/1999 Coll., on the Residence of Foreign NationalsIf your application is rejected or your residence permit is cancelled, you have specific legal rights and very strict deadlines.1. The Right to AppealDeadline: You have exactly 15 days from the day after you receive the written decision to file an appeal.Where to file: The appeal must be submitted to the Ministry of the Interior (MOI) office or the Embassy that issued the decision. It can be sent by post or via Data Box.Suspensive Effect: If you appeal a rejection of a permit extension while inside the CR, you are usually allowed to stay legally until a final decision is made (request a Bridge Label).2. Common Grounds for RejectionOutdated Documents: All documents (except your passport) must not be older than 180 days at the time of submission.Incorrect Insurance: For long-term stays, only Comprehensive Healthcare Insurance from an authorized Czech company (primarily PVZP) is accepted.Translation Issues: Every foreign document must be translated by a Czech-certified translator (official round-stamp).3. The Exit Order (Výjezdní příkaz)If your appeal is rejected or you decide not to appeal, you will receive an Exit Order stamp in your passport.Validity: Usually 30 days.Constraint: You can only use it to leave the country. You cannot travel to other Schengen states with an Exit Order.Risk: Overstaying an Exit Order leads to Administrative Expulsion (Deportation) and a ban from the entire Schengen Area for up to 3 years.SECTION 10: ADMINISTRATIVE OBLIGATIONS & "DATA BOX"Best Practice for Students1. Reporting ArrivalNon-EU Students: Must report to the MOI/OAMP office within 3 working days of arrival to start the biometric residence card process.EU Students: Must register with the Foreign Police within 30 days if staying longer than 30 days.2. The "Data Box" (Datová schránka)It is highly recommended for students to open a Data Box (free at any Czech POINT office).Why? The Ministry sends all official letters (notifications, requests for missing documents) digitally. This ensures you never miss a deadline due to mail delivery issues or moving apartments.Legal Weight: A message in a Data Box is legally equivalent to a certified letter delivered in person.CONTACTS FOR IMMIGRATION ASSISTANCEMOI Information Line: (+420) 974 801 801 (English/Czech).Official Immigration Portal: frs.gov.cz.Study in Czechia Official Site: studyinczechia.cz.

@@ -12,11 +12,11 @@ load_dotenv()
 def main():
     # Usamos /tmp para Linux/Streamlit Cloud
     persist_dir = "/tmp/vector_db"
-    print("📂 Iniciando proceso de ingesta robusta...")
+    print("📂 Starting injection...")
     
     if not os.path.exists("data"):
         os.makedirs("data")
-        print("📁 Carpeta 'data' creada. Pon tus archivos ahí.")
+        print("📁 Repositroy created 'data'. Add your files.")
         return
 
     # Carga de documentos
@@ -25,7 +25,7 @@ def main():
     raw_documents = txt_loader.load() + pdf_loader.load()
     
     if not raw_documents:
-        print("❌ No hay documentos en 'data/'.")
+        print("❌ Not cuments found in 'data/'.")
         return
 
     # Fragmentación más pequeña (500) para procesar rápido
@@ -44,7 +44,7 @@ def main():
     if os.path.exists(persist_dir):
         shutil.rmtree(persist_dir)
 
-    print(f"🧠 Generando vectores para {len(chunks)} fragmentos en bloques pequeños...")
+    print(f"🧠 Generating vector {len(chunks)} ...")
     
     # Ingesta por bloques de 5 con pausas de 2 segundos para evitar Error 504
     vector_db = Chroma.from_documents(
@@ -56,10 +56,10 @@ def main():
     for i in range(5, len(chunks), 5):
         batch = chunks[i:i+5]
         vector_db.add_documents(batch)
-        print(f"   --- Procesados {i+len(batch)} de {len(chunks)}...")
+        print(f"   --- Processed {i+len(batch)} de {len(chunks)}...")
         time.sleep(2) # Pausa de seguridad para la API de Google
 
-    print("✅ Ingesta completada con éxito en /tmp/vector_db.")
+    print("✅ Ingest completed successfully /tmp/vector_db.")
 
 if __name__ == "__main__":
     main()
