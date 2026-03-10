@@ -1,97 +1,468 @@
 ================================================================================
-IMMIGRASMART CORE KNOWLEDGE BASE: CZECH REPUBLIC IMMIGRATION (VER. 2026.1)
+IMMIGRASMART CORE KNOWLEDGE BASE: CZECH REPUBLIC IMMIGRATION (VER. 2026.2)
+================================================================================
+Last Updated: January 2026
+Sources: Ministry of the Interior (MVČR), Act No. 326/1999 Coll., ipc.gov.cz, frs.gov.cz
+Disclaimer: This knowledge base is for informational purposes only. Always verify
+current requirements with the official OAMP office or legal counsel.
 ================================================================================
 
-SECTION 1: ARRIVAL & BIOMETRICS (OAMP/MOI)
-Source: Ministry of the Interior (MVČR) - Official 2026 Guidelines
+================================================================================
+SECTION 1: ARRIVAL & BIOMETRICS
+================================================================================
+[SECTION_ID: arrival_biometrics]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: arrival, biometrics, fingerprints, facial image, OAMP, MOI, registration, foreign police, residence card]
 
-1. REPORTING ARRIVAL (Non-EU)
-   - Deadline: Within 3 working days of entering the Czech Republic.
-   - Action: All foreign students must report in person to the Ministry of the Interior (MOI/OAMP) office.
-   - Purpose: Collection of biometric data (facial image + fingerprints).
+--- 1.1 NON-EU STUDENTS: REPORTING ARRIVAL ---
 
-2. RESIDENCE CARD COLLECTION
-   - Students must collect their biometric residence card within 60 days of the data collection. Failure to collect the card may lead to the cancellation of the residence permit.
+After entering the Czech Republic, every non-EU student MUST complete TWO steps:
 
-3. FOREIGN POLICE REGISTRATION (EU & Non-EU)
-   - Non-EU Students: Mandatory registration within 3 working days (usually handled at the OAMP during biometrics).
-   - EU Students: Must register with the Foreign Police within 30 days if staying longer than 30 days.
+STEP 1 — Report to OAMP (Ministry of Interior)
+- Deadline: Within 3 working days of entering the Czech Republic.
+- Location: Your local OAMP (Department for Asylum and Migration Policy) office.
+- Purpose: Collection of biometric data — facial image + fingerprints.
+- Note: This step is MANDATORY. Missing it can jeopardize your residence permit.
 
+STEP 2 — Foreign Police Registration (usually done at OAMP simultaneously)
+- Non-EU students must register with the Foreign Police within 3 working days.
+- In most cases, this is handled automatically at the OAMP biometrics appointment.
+- If staying in private accommodation (not a dormitory), your landlord must also
+  register your address at the Foreign Police within 3 working days.
+
+--- 1.2 EU STUDENTS: REGISTRATION ---
+
+- EU citizens do NOT need to register for stays under 30 days.
+- For stays LONGER than 30 days: Must register with the Foreign Police within 30 days of arrival.
+- Registration is at the local Foreign Police department, NOT OAMP.
+
+--- 1.3 COLLECTING YOUR RESIDENCE CARD ---
+
+- After biometrics at OAMP, your biometric residence card is produced and sent to the office.
+- You MUST collect the card within 60 days of your biometrics appointment.
+- IMPORTANT: Failure to collect the card within 60 days can result in cancellation
+  of your residence permit.
+- You will be notified by the OAMP office (or via your Data Box — see Section 6)
+  when the card is ready.
+
+--- 1.4 COMMON ARRIVAL MISTAKES TO AVOID ---
+
+- Do NOT confuse the Foreign Police with OAMP — they are different offices.
+- Do NOT assume your university handles registration for you — it is YOUR responsibility.
+- Do NOT travel outside the Czech Republic before collecting your residence card,
+  unless you have a valid Bridge Label (see Section 2.3).
+
+================================================================================
 SECTION 2: EXTENDING YOUR RESIDENCE PERMIT
-Source: Act No. 326/1999 Coll. on the Residence of Foreign Nationals
+================================================================================
+[SECTION_ID: residence_extension]
+[AUDIENCE: non-EU]
+[KEYWORDS: extension, renewal, residence permit, deadline, application, filing window, bridge label, překlenovací štítek, expiration, overstay]
 
-1. FILING WINDOWS (Strict Deadlines)
-   - Earliest: 90 days before current permit expiration.
-   - Latest: Last day of current permit validity (Note: Previously it was 14 days, but currently the MOI accepts applications until the last day to prevent illegal stay).
-   - Recommendation: Apply at least 30 days before expiry to avoid processing delays.
+--- 2.1 WHEN TO APPLY: FILING WINDOWS ---
 
-2. THE "BRIDGE LABEL" (Překlenovací štítek)
-   - Purpose: If your visa expires while an extension is being processed, you must request this physical stamp in your passport at the OAMP office. 
-   - Travel: It allows you to travel outside the Czech Republic and re-enter legally during the "pending" period.
+You can submit your extension application within a specific window:
 
+- EARLIEST: 90 days before your current permit's expiration date.
+- LATEST: The last day your current permit is valid.
+  (Note: The previous rule required applying 14 days before expiry. As of 2025-2026,
+  the MOI accepts applications until the last day to prevent accidental illegal stay.)
+- RECOMMENDED: Apply at least 30 days before expiry to allow for processing time
+  and to request a Bridge Label if needed.
+
+CONSEQUENCE OF MISSING THE DEADLINE:
+If your permit expires before you apply, you are in illegal stay. This can result in
+an exit order, ban on re-entry, and deportation. See Section 5 for details.
+
+--- 2.2 WHAT DOCUMENTS YOU NEED FOR AN EXTENSION ---
+
+Prepare the following documents for your extension application:
+1. Valid passport (must be valid at least 3 months beyond the new permit's end date).
+2. Completed application form (available at OAMP or online at frs.gov.cz).
+3. Proof of study (enrollment confirmation from your university, not older than 180 days).
+4. Proof of accommodation (rental contract or dormitory confirmation, not older than 180 days).
+5. Proof of financial means (see Section 3 for exact amounts and accepted formats).
+6. Comprehensive health insurance (see Section 4 — only specific providers accepted).
+7. 2 passport-size photos.
+8. Payment of the administrative fee (currently 1,000 CZK for long-term permits).
+
+ALL DOCUMENTS must NOT be older than 180 days at the time of submission.
+Foreign-language documents MUST be accompanied by a certified Czech translation.
+
+--- 2.3 THE BRIDGE LABEL (Překlenovací Štítek) ---
+
+WHAT IT IS:
+The Bridge Label is a physical stamp placed in your passport by the OAMP office.
+It confirms that your extension application is pending and your stay is legal.
+
+WHEN YOU NEED IT:
+- When your current visa/permit expires while your extension is still being processed.
+- When you need to travel outside the Czech Republic during the pending period.
+
+HOW TO GET IT:
+- Visit your OAMP office in person and request it explicitly.
+- You must already have a pending extension application submitted.
+
+TRAVEL RULES WITH BRIDGE LABEL:
+- You CAN travel outside the Czech Republic and legally re-enter.
+- You CANNOT travel freely within the Schengen area without a valid visa/permit;
+  the Bridge Label only guarantees legal status IN the Czech Republic.
+
+WITHOUT A BRIDGE LABEL:
+- If your permit expires and you travel abroad, you may be denied re-entry.
+- Always request the Bridge Label proactively before your permit expires.
+
+================================================================================
 SECTION 3: FINANCIAL REQUIREMENTS (PROOF OF FUNDS 2026)
-Source: MVČR - Official 2026 Existential Minimum Standards
+================================================================================
+[SECTION_ID: financial_requirements]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: finances, proof of funds, bank statement, existential minimum, money, CZK, scholarship, sponsorship, financial proof, bank account]
 
-1. CALCULATION FORMULA (Existential Minimum = 3,130 CZK)
-   - First Month: 15 times the existential minimum (15 x 3,130 = 46,950 CZK).
-   - Each Additional Month: 2 times the existential minimum (2 x 3,130 = 6,260 CZK).
+--- 3.1 THE 2026 CALCULATION FORMULA ---
 
-2. REQUIRED TOTAL AMOUNTS FOR 2026/2027
-   - 1 Semester (6 months): 78,250 CZK (approx. €3,100 / $3,350).
-   - 1 Academic Year (12 months): 115,810 CZK (approx. €4,600 / $5,000).
-   - Minors (Under 18): Only required to prove 50% of these amounts.
+Financial requirements are based on the Czech "Existential Minimum":
+- 2026 Existential Minimum: 3,130 CZK per month.
 
-    The 2026 Financial FormulaThe required amount is calculated using the Existential Minimum, which for 2026 remains set at 3,130 CZK.First Month: 15 times the existential minimum ($15 \times 3,130 = 46,950$ CZK).Each Additional Month: 2 times the existential minimum ($2 \times 3,130 = 6,260$ CZK).🧮 Calculation for a 10-Month StayIf you are planning to stay for 10 months, the calculation is as follows:Month 1: $15 \times 3,130 = 46,950$ CZKMonths 2 to 10 (9 months): $9 \times (2 \times 3,130) = 56,340$ CZKTotal Amount: $46,950 + 56,340 =$ 103,290 CZKNote: For a full academic year (12 months), the standard amount requested by the Ministry of the Interior (OAMP) is 115,810 CZK.
+FORMULA:
+- First Month: 15 × 3,130 CZK = 46,950 CZK
+- Each Additional Month: 2 × 3,130 CZK = 6,260 CZK per month
 
-3. ACCEPTED PROOF
-   - Personal Bank Statement: Must be in the student's name + Copy of an international debit card (Visa/Mastercard).
-   - Scholarship Confirmation: Must state the specific monthly amount.
-   - Sponsorship: Notarized letter + Sponsor's bank statements + Official Czech translation.
+--- 3.2 REQUIRED AMOUNTS FOR COMMON STAY LENGTHS ---
 
-SECTION 4: HEALTH INSURANCE & DOCUMENTS
-Source: Ministry of Health & MVČR Requirements
+| Duration         | Calculation                              | Total (CZK) | Approx. (EUR) | Approx. (USD) |
+|------------------|------------------------------------------|-------------|---------------|---------------|
+| 1 month          | 46,950                                   | 46,950 CZK  | ~1,880 EUR    | ~2,040 USD    |
+| 3 months         | 46,950 + (2 × 6,260)                     | 59,470 CZK  | ~2,380 EUR    | ~2,580 USD    |
+| 6 months (1 sem) | 46,950 + (5 × 6,260)                     | 78,250 CZK  | ~3,130 EUR    | ~3,390 USD    |
+| 10 months        | 46,950 + (9 × 6,260)                     | 103,290 CZK | ~4,130 EUR    | ~4,480 USD    |
+| 12 months (1 yr) | 46,950 + (11 × 6,260)                    | 115,810 CZK | ~4,630 EUR    | ~5,020 USD    |
 
-1. COMPREHENSIVE INSURANCE (Mandatory)
-   - Only "Comprehensive Healthcare Insurance" (Komplexní pojištění) is accepted for long-term stays.
-   - Authorized Providers: Pojišťovna VZP (PVZP) is the primary provider. "Emergency" or foreign insurance is NOT valid for extensions inside the CR.
+EXAMPLE — Calculating for 10 months:
+  Month 1:      15 × 3,130 =  46,950 CZK
+  Months 2–10:   9 × 6,260 =  56,340 CZK
+  TOTAL:                      103,290 CZK
 
-2. DOCUMENT VALIDITY
-   - All supporting documents (Bank statements, Study confirmations, Accommodation contracts) must NOT be older than 180 days at the time of submission.
-   - Passports must be valid for at least 3 months beyond the intended stay.
+MINORS (Under 18): Only 50% of the above amounts are required.
 
-SECTION 5: ADMINISTRATIVE EXPULSION & NEW 2026 RULES
-Source: Act No. 326/1999 Coll. (Amended 2026)
+--- 3.3 ACCEPTED FORMS OF PROOF ---
 
-1. REPEATED OFFENCES (New for 2026)
-   - Effective Jan 1, 2026, a residence permit can be revoked or not extended if the foreigner repeatedly commits administrative offences (e.g., disturbing public order, noise violations, or minor traffic offences). "Repeated" is defined as 3 or more offences within 12 months.
+OPTION A — Personal Bank Statement:
+- Must be in the STUDENT'S own name (not parents, not a joint account alone).
+- Must be an official bank statement, not a screenshot or app printout.
+- Must show sufficient balance for the entire requested stay duration.
+- MUST be accompanied by a copy of an international debit/credit card (Visa or Mastercard).
+- Statement must not be older than 180 days at time of submission.
 
-2. GROUNDS FOR DEPORTATION
-   - Invalid residence (overstaying).
-   - Forged documents.
-   - Illegal employment (working without being a student).
-   - Failure to meet the "Purpose of Stay" (e.g., expelled from university).
+OPTION B — Scholarship Letter:
+- Must be an official letter from the scholarship provider.
+- Must state the SPECIFIC monthly amount awarded (a general letter is not accepted).
+- Must cover the entire stay period.
+- Foreign scholarships must include a certified Czech translation.
 
-3. THE EXIT ORDER (Výjezdní příkaz)
-   - Validity: Usually 30 days.
-   - Constraint: You CANNOT travel to other Schengen countries. It is for leaving the CR only.
+OPTION C — Sponsor/Guarantor:
+- Notarized sponsorship letter stating commitment to support the student financially.
+- Sponsor's official bank statements showing sufficient funds.
+- If the sponsor is a foreign national, documents need a certified Czech translation.
+- The sponsor may be asked to appear at the OAMP office in person.
 
-SECTION 6: LEGAL APPEALS & DATA BOX
-Source: Information Portal for Foreigners (ipc.gov.cz)
+OPTION D — Combination:
+- You may combine scholarship + personal bank account to reach the required total.
+- Each document must individually meet the format requirements above.
 
-1. FILING AN APPEAL (Rejection)
-   - Deadline: Exactly 15 days from the day after the decision was delivered.
-   - Suspensive Effect: An appeal usually allows you to stay in the CR until the decision is final, PROVIDED it was a renewal/extension application.
+--- 3.4 COMMON FINANCIAL MISTAKES ---
 
-2. THE "DATA BOX" (Datová schránka)
-   - Highly recommended for students (Free at Czech POINT).
-   - Legal Fact: Messages are considered "delivered" 10 days after sent, even if not opened.
-   - Benefit: Instant notification of missing documents or approval.
+- Using a JOINT account without also having your name on it as primary account holder.
+- Submitting a bank statement WITHOUT the accompanying debit/credit card copy.
+- Submitting a scholarship letter that does not specify the monthly amount.
+- Submitting documents older than 180 days.
 
-SECTION 7: POST-GRADUATION (JOB SEEKING)
-   - Graduates of Czech universities can apply for a 9-month residence permit to find a job or start a business.
-   - Requirements: Diploma/Study completion certificate + Proof of funds (SECTION 3) + Insurance (SECTION 4).
+================================================================================
+SECTION 4: HEALTH INSURANCE
+================================================================================
+[SECTION_ID: health_insurance]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: insurance, health insurance, comprehensive, PVZP, VZP, pojištění, medical, coverage, komplexní pojištění]
 
-OFFICIAL CONTACTS:
-- MOI Info Line: (+420) 974 801 801
-- Web: frs.gov.cz / ipc.gov.cz
-- Legal Aid (Free): SIMI (migrace.com) or OPU (opu.cz)
+--- 4.1 WHAT TYPE OF INSURANCE IS REQUIRED ---
+
+MANDATORY: "Comprehensive Healthcare Insurance" (Czech: Komplexní zdravotní pojištění cizinců)
+
+This is a specific type of insurance that covers:
+- Hospitalization and surgery.
+- Emergency and non-emergency outpatient care.
+- Dental emergencies.
+- Repatriation in case of death.
+
+NOT ACCEPTED (common mistakes):
+- "Travel insurance" or "emergency-only" policies — these are NOT valid for long-term permits.
+- Foreign insurance policies (even comprehensive ones from your home country).
+- European Health Insurance Card (EHIC) alone — not sufficient for residence permit purposes.
+- Short-term tourist insurance.
+
+--- 4.2 APPROVED INSURANCE PROVIDERS ---
+
+Primary approved provider for foreign students:
+- PVZP (Pojišťovna VZP, a.s.) — pvzp.cz — Most commonly accepted by OAMP.
+- Other Czech commercial insurers may be accepted; always confirm with OAMP
+  that your specific policy type is "Komplexní pojištění."
+
+--- 4.3 INSURANCE DURING EXTENSION PROCESSING ---
+
+- Your insurance must remain VALID and CONTINUOUS throughout your stay.
+- If your permit is pending (with Bridge Label), you must maintain valid insurance
+  for the entire duration — do not let it lapse.
+- When renewing, purchase the new policy to START on the same day the old one ends.
+
+--- 4.4 DOCUMENT REQUIREMENTS ---
+
+- Policy must be in your name.
+- Must show coverage start and end dates.
+- Must state "Komplexní pojištění" or equivalent comprehensive coverage.
+- Must not be older than 180 days at submission (for renewals with future start dates,
+  this means obtaining a confirmation of coverage letter, not just the policy itself).
+
+================================================================================
+SECTION 5: ADMINISTRATIVE EXPULSION & LEGAL VIOLATIONS
+================================================================================
+[SECTION_ID: expulsion_violations]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: expulsion, deportation, exit order, výjezdní příkaz, overstay, illegal stay, revocation, criminal, offences, violations, forged documents]
+
+--- 5.1 GROUNDS FOR PERMIT REVOCATION OR NON-RENEWAL ---
+
+Your residence permit can be revoked or not renewed if:
+1. You overstay (permit expires and no extension application was submitted).
+2. You are found in illegal employment (working outside the rules of your student permit).
+3. You are expelled from your university (failure to meet the "Purpose of Stay").
+4. You submitted forged or misleading documents to OAMP.
+5. You repeatedly commit administrative offences (NEW RULE — see 5.2).
+
+--- 5.2 NEW 2026 RULE: REPEATED ADMINISTRATIVE OFFENCES ---
+
+Effective January 1, 2026 (Amendment to Act No. 326/1999 Coll.):
+
+DEFINITION: "Repeated" = 3 or more administrative offences within any 12-month period.
+
+Examples of offences that COUNT toward this limit:
+- Public order disturbances (noise complaints, public intoxication).
+- Minor traffic offences (e.g., speeding tickets, parking violations).
+- Offences under municipal bylaws.
+
+CONSEQUENCE: The OAMP may use repeated minor offences as grounds to:
+- Refuse an extension of your residence permit.
+- Revoke your current permit.
+
+IMPORTANT: This does not require a criminal conviction. Administrative fines alone
+are sufficient to trigger this rule if they accumulate to 3+ within 12 months.
+
+--- 5.3 THE EXIT ORDER (Výjezdní Příkaz) ---
+
+WHAT IT IS: A document issued when your stay becomes illegal, granting you a fixed
+period to leave the Czech Republic voluntarily.
+
+KEY FACTS:
+- Standard validity: 30 days from issuance.
+- You CANNOT travel to other Schengen Area countries with an Exit Order.
+- It authorizes ONLY leaving the Czech Republic — not re-entry, not Schengen travel.
+- Failure to leave by the deadline results in forced removal and a multi-year entry ban.
+
+IF YOU RECEIVE AN EXIT ORDER:
+1. Contact a legal aid organization immediately (SIMI or OPU — see contacts below).
+2. Check if you have grounds to appeal (see Section 6).
+3. Do NOT travel to other Schengen countries — this will result in immediate detention.
+
+--- 5.4 ENTRY BANS AFTER DEPORTATION ---
+
+- Deportation typically results in a 1–5 year ban from re-entering the Schengen Area.
+- Bans are recorded in the Schengen Information System (SIS) and affect ALL Schengen
+  countries, not just the Czech Republic.
+
+================================================================================
+SECTION 6: LEGAL APPEALS, DATA BOX & ADMINISTRATIVE RIGHTS
+================================================================================
+[SECTION_ID: legal_appeals_databox]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: appeal, rejection, data box, datová schránka, Czech POINT, legal rights, deadline, suspensive effect, missing documents, notification]
+
+--- 6.1 IF YOUR APPLICATION IS REJECTED ---
+
+You have the right to appeal any OAMP decision. Key rules:
+
+APPEAL DEADLINE:
+- Exactly 15 days from the day AFTER the written decision was delivered to you.
+- Example: Decision delivered on January 10 → Appeal must be filed by January 26.
+- Missing this deadline = the decision becomes final and you lose the right to appeal.
+
+SUSPENSIVE EFFECT:
+- If you filed an appeal on a RENEWAL/EXTENSION application, you are typically
+  allowed to remain legally in the Czech Republic until the final decision.
+- This suspensive effect does NOT apply if you are appealing a first-time visa refusal.
+
+HOW TO FILE AN APPEAL:
+- Submit the appeal IN WRITING to the OAMP office that issued the decision.
+- Clearly state the grounds for appeal (factual errors, procedural violations, etc.).
+- Include any new evidence or documents that support your case.
+- Strongly recommended: Get assistance from SIMI or OPU (free legal aid) — see contacts.
+
+--- 6.2 THE DATA BOX (Datová Schránka) ---
+
+WHAT IT IS: A secure government electronic mailbox for official communication.
+
+WHY STUDENTS SHOULD HAVE IT:
+- OAMP and other government bodies can send you official decisions, requests for
+  missing documents, and approval notifications electronically.
+- Much faster than postal mail — often days vs. weeks.
+
+CRITICAL LEGAL RULE:
+- Messages are legally considered "delivered" 10 days after being sent, regardless
+  of whether you opened them.
+- If you ignore your Data Box, you could miss a deadline without knowing it.
+
+HOW TO GET ONE (Free):
+- Visit any Czech POINT location (at post offices, municipal offices).
+- Bring your valid passport or residence card.
+- Setup takes approximately 15 minutes.
+
+RECOMMENDED ACTION: Set up a Data Box as soon as you receive your residence card.
+
+--- 6.3 REQUEST FOR MISSING DOCUMENTS (Výzva k doplnění) ---
+
+- OAMP may send you a formal request asking for additional documents.
+- You are given a specific deadline to respond (usually 30–60 days).
+- This request SUSPENDS the processing timeline while you gather documents.
+- Always respond before the deadline. Use your Data Box to confirm receipt.
+
+================================================================================
+SECTION 7: POST-GRADUATION OPTIONS
+================================================================================
+[SECTION_ID: post_graduation]
+[AUDIENCE: non-EU]
+[KEYWORDS: after graduation, job seeker, graduate, diploma, work permit, employment, business, startup, 9 months, post-study]
+
+--- 7.1 JOB SEEKER / POST-STUDY RESIDENCE PERMIT ---
+
+Czech university graduates (non-EU) can apply for a special residence permit
+to stay in the Czech Republic after completing their degree.
+
+DURATION: 9 months (non-renewable under this category)
+PURPOSE: Finding employment OR starting a business.
+
+ELIGIBILITY:
+- Must have completed a degree at a Czech university (Bc., Mgr., Ing., Ph.D., etc.).
+- Application must be submitted BEFORE your current student permit expires.
+
+REQUIRED DOCUMENTS:
+1. Diploma or official study completion certificate from your university.
+2. Proof of financial means (same formula as Section 3 — calculated for 9 months:
+   46,950 + (8 × 6,260) = 96,990 CZK).
+3. Valid Comprehensive Health Insurance (Section 4).
+4. Valid passport (valid at least 3 months beyond the 9-month permit end date).
+5. Proof of accommodation for the 9-month period.
+
+--- 7.2 TRANSITIONING TO A WORK PERMIT ---
+
+If you find employment during the 9-month period:
+- Apply for an Employee Card (Zaměstnanecká karta) — this combines residence + work permit.
+- Your employer must file a vacancy report with the Labor Office before you can apply.
+- The Employee Card application can be submitted while you hold the job-seeker permit.
+
+If you start a business:
+- Apply for a Trade License (Živnostenský list) first.
+- Then apply for a "Self-Employed Residence Permit" based on business activity.
+
+================================================================================
+SECTION 8: STUDY OBLIGATIONS & UNIVERSITY REPORTING
+================================================================================
+[SECTION_ID: study_obligations]
+[AUDIENCE: non-EU]
+[KEYWORDS: study, university, enrollment, academic progress, purpose of stay, expulsion, credits, semester, academic failure]
+
+--- 8.1 PURPOSE OF STAY REQUIREMENT ---
+
+Your residence permit is granted specifically for the PURPOSE of study. This means:
+
+- You must remain actively enrolled at your registered Czech university.
+- You must make reasonable academic progress (not failing all courses every semester).
+- If you are EXPELLED from your university or withdraw your enrollment, the Purpose
+  of Stay no longer exists and your permit can be revoked.
+
+--- 8.2 WHAT HAPPENS IF YOU CHANGE UNIVERSITIES ---
+
+- If you transfer to a different Czech university, you MUST notify OAMP.
+- Bring: Withdrawal confirmation from old university + Enrollment confirmation from new university.
+- Deadline: As soon as possible — within 3 working days is advisable.
+- Failure to notify OAMP of a university change can be treated as a violation of your permit conditions.
+
+--- 8.3 TAKING A LEAVE OF ABSENCE ---
+
+- Some universities grant official Leave of Absence (LOA) that maintains your enrolled status.
+- Check whether your university's LOA counts as "active enrollment" for OAMP purposes.
+- If not, your permit may be at risk. Consult SIMI or OPU (see contacts) before taking an LOA.
+
+================================================================================
+SECTION 9: WORKING AS A STUDENT
+================================================================================
+[SECTION_ID: student_employment]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: work, job, employment, working hours, part-time, full-time, permit, student job, illegal work, internship]
+
+--- 9.1 NON-EU STUDENTS: WORK RIGHTS ---
+
+Non-EU students on a Long-Term Student Residence Permit:
+- May work WITHOUT a separate work permit.
+- NO hour restrictions apply (you can work full-time or part-time).
+- This applies ONLY if your employment contract specifies a standard employment relationship.
+
+RESTRICTIONS:
+- You may NOT work illegally (i.e., without a formal contract and tax registration).
+- Your PRIMARY purpose of stay must remain STUDY. If you stop studying and only work,
+  your permit conditions are violated.
+
+--- 9.2 EU STUDENTS: WORK RIGHTS ---
+
+- EU citizens have full work rights in the Czech Republic without any restrictions.
+- No work permit needed, no hour limits.
+
+--- 9.3 INTERNSHIPS ---
+
+- Paid internships: Treated as employment — a contract is required.
+- Unpaid internships as part of your curriculum: Generally covered under your student status.
+  Get written confirmation from your university that the internship is part of your program.
+
+================================================================================
+SECTION 10: QUICK REFERENCE — DEADLINES & KEY NUMBERS
+================================================================================
+[SECTION_ID: quick_reference]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: deadlines, summary, key numbers, checklist, CZK, days, quick reference]
+
+CRITICAL DEADLINES:
+- Report to OAMP after arrival (Non-EU):          3 working days
+- Foreign Police registration (EU, >30 days):     30 days
+- Collect residence card after biometrics:         60 days (or permit may be cancelled)
+- Earliest you can apply for extension:           90 days before expiry
+- Latest you can apply for extension:             Last day of current permit
+- Recommended time to apply before expiry:        30+ days
+- Appeal deadline after rejection:                15 days after decision delivered
+- Data Box deemed delivered even if unopened:     10 days after sending
+
+KEY FINANCIAL FIGURES (2026):
+- Existential Minimum:                            3,130 CZK/month
+- First month requirement:                        46,950 CZK
+- Each additional month:                           6,260 CZK
+- 6-month total:                                  78,250 CZK (~€3,130)
+- 12-month total:                                115,810 CZK (~€4,630)
+
+KEY CONTACTS:
+- MOI/OAMP Info Line:          +420 974 801 801
+- OAMP Appointments:           frs.gov.cz
+- Official Information Portal: ipc.gov.cz
+- Free Legal Aid (SIMI):       migrace.com
+- Free Legal Aid (OPU):        opu.cz
+- PVZP Insurance:              pvzp.cz
+- Czech POINT (Data Box):      czechpoint.cz
+
+================================================================================
+END OF KNOWLEDGE BASE — VER. 2026.2
+================================================================================
