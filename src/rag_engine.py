@@ -168,7 +168,7 @@ def get_rag_chain():
         temperature=0.1,
         google_api_key=api_key,
     )
-    retriever = vector_db.as_retriever(search_kwargs={"k": 6})
+    retriever = vector_db.as_retriever(search_kwargs={"k": 10})
     return llm, retriever, vector_db, CONDENSE_PROMPT
 
 
@@ -204,8 +204,68 @@ class ImmigraSmartChat:
         chain = self.condense_prompt | self.llm | self.parser
         return chain.invoke({"chat_history": self.chat_history, "input": user_input})
 
+    # Keyword → canonical search query mapping.
+    # When a user's phrasing matches a keyword pattern, we GUARANTEE
+    # that the canonical query is always included in retrieval — even
+    # if the vector search misses it due to semantic distance.
+    KEYWORD_BOOSTS = {
+        # Work / employment questions
+        frozenset(["work", "job", "employ", "earn", "paid", "salary", "wage",
+                   "part-time", "parttime", "full-time", "fulltime", "internship",
+                   "working", "trabajar", "trabajo", "trabajando", "practicas",  # ES
+                   "работ", "стажировк",                                          # RU/UK
+                   "làm việc", "công việc",                                       # VI
+                   "工作", "实习",                                                  # ZH
+                   ]): "Can a student work in Czech Republic without a work permit?",
+
+        # Financial / money questions
+        frozenset(["money", "bank", "funds", "financial", "account", "savings",
+                   "scholarship", "sponsor", "afford", "balance", "CZK", "euros",
+                   "dinero", "cuenta", "beca",                                    # ES
+                   "деньги", "счёт", "стипендия",                                 # RU/UK
+                   ]): "How much money do I need for a Czech student visa?",
+
+        # Insurance questions
+        frozenset(["insurance", "health", "PVZP", "VZP", "pojisteni", "pojištění",
+                   "medical", "coverage", "seguro", "salud",                      # ES
+                   "страховка", "медицинская",                                     # RU/UK
+                   ]): "What health insurance do I need for a Czech student visa?",
+
+        # Bridge label / extension questions
+        frozenset(["bridge", "label", "sticker", "štítek", "překlenovací",
+                   "expir", "extend", "renew", "extension", "renewal",
+                   "vencida", "renovar", "prórroga",                              # ES
+                   ]): "What is the Bridge Label překlenovací štítek and when do I need it?",
+
+        # Arrival / registration questions
+        frozenset(["arriv", "register", "biometric", "fingerprint", "OAMP",
+                   "foreign police", "llegada", "registro", "llegué",             # ES
+                   "прибыть", "регистрация",                                      # RU/UK
+                   ]): "What do I do when I arrive in Czech Republic as a student?",
+    }
+
+    def _keyword_boost_queries(self, question: str) -> list[str]:
+        """
+        Returns a list of canonical search queries that should be force-added
+        based on keyword detection in the user's question.
+        Solves the semantic gap problem: 'can I work?' doesn't match
+        'WORKING AS A STUDENT' without this bridge.
+        """
+        q_lower = question.lower()
+        boost_queries = []
+        for keywords, canonical_query in self.KEYWORD_BOOSTS.items():
+            if any(kw in q_lower for kw in keywords):
+                boost_queries.append(canonical_query)
+        return boost_queries
+
     def _multi_retrieve(self, question: str) -> list:
-        """3-variant retrieval: original + 2 rephrasings, deduplicated."""
+        """
+        Retrieval strategy (3 layers):
+        1. Original question
+        2. 2 LLM rephrasings (semantic variants)
+        3. Keyword-boosted canonical queries (guaranteed section coverage)
+        All results are merged and deduplicated.
+        """
         rephrase_chain = (
             ChatPromptTemplate.from_template(
                 "Rephrase this Czech immigration question in 2 different ways "
@@ -222,6 +282,9 @@ class ImmigraSmartChat:
             ][:2]
         except Exception:
             variants = [question]
+
+        # Add keyword-boosted canonical queries
+        variants += self._keyword_boost_queries(question)
 
         seen, docs = set(), []
         for v in variants:

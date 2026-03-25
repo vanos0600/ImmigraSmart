@@ -466,3 +466,109 @@ KEY CONTACTS:
 ================================================================================
 END OF KNOWLEDGE BASE — VER. 2026.2
 ================================================================================
+
+================================================================================
+SECTION 11: FREQUENTLY ASKED QUESTIONS (Q&A BRIDGE PAIRS)
+================================================================================
+[SECTION_ID: faq_bridge]
+[AUDIENCE: non-EU, EU]
+[KEYWORDS: faq, questions, can i work, study visa, student visa, working permit, job while studying, allowed to work, employment rights, work during studies, part time job, earn money, get a job, working visa, working while studying, can i get a job, am i allowed to work, work rights, student work permit, work authorization]
+
+PURPOSE: This section maps common user phrasings to official answers.
+It bridges the semantic gap between how students ask questions and how
+official documents title the information.
+
+--- Q&A: WORKING WHILE STUDYING ---
+
+Q: Can I work while studying in Czech Republic?
+A: Yes. Non-EU students holding a Long-Term Student Residence Permit may work
+   without needing a separate work permit. There are no restrictions on working
+   hours — you can work part-time or full-time. The only requirement is that
+   you have a formal employment contract and remain enrolled in your studies.
+   See Section 9 for full details.
+
+Q: Do I need a work permit to get a job as an international student?
+A: No. If you hold a Long-Term Student Residence Permit (vydané za účelem studia),
+   you are automatically allowed to work for any employer without applying for a
+   separate work permit. EU students have full unrestricted work rights.
+
+Q: How many hours can I work per week on a student visa?
+A: There is no hour limit for non-EU students on a Czech Long-Term Student Residence
+   Permit. You may work full-time (40 hours/week) or part-time. This is different
+   from many other EU countries that restrict student working hours.
+
+Q: Can I do a paid internship while studying?
+A: Yes, but a formal contract is required. Paid internships are treated as
+   standard employment. Unpaid internships that are part of your official
+   curriculum are covered under your student status — get written confirmation
+   from your university.
+
+Q: What happens if I work without a contract?
+A: Working without a formal employment contract is considered "illegal work" and
+   can result in revocation of your residence permit. Always insist on a written
+   contract and ensure your employer registers you for taxes.
+
+Q: Can I work while my residence permit extension is being processed?
+A: Yes. If you submitted your extension application before your permit expired,
+   your previous conditions (including the right to work) remain valid during
+   processing. Request a Bridge Label (překlenovací štítek) at OAMP to confirm
+   your legal status during this period.
+
+--- Q&A: FINANCIAL REQUIREMENTS ---
+
+Q: How much money do I need in my bank account for a student visa?
+A: The required amount depends on your stay length. For 2026, the formula is:
+   46,950 CZK for the first month + 6,260 CZK for each additional month.
+   For a full academic year (12 months) you need 115,810 CZK (approx. €4,630).
+   See Section 3 for the full table and accepted proof formats.
+
+Q: Can my parents send me money for the visa requirement?
+A: Yes, through a formal sponsorship arrangement. You need a notarized sponsorship
+   letter from your parents plus their official bank statements. A simple bank
+   transfer is not sufficient — the sponsorship must be documented. See Section 3.3.
+
+Q: Does a scholarship count as proof of funds?
+A: Yes, if the scholarship letter states the specific monthly amount and covers
+   the entire stay period. A general award letter without amounts is NOT accepted.
+
+--- Q&A: ARRIVAL & REGISTRATION ---
+
+Q: What do I do first when I arrive in Czech Republic as a student?
+A: Within 3 working days of arrival you must visit your local OAMP office for
+   biometric data collection (fingerprints and photo). Foreign Police registration
+   is typically done simultaneously. Do not miss this deadline — it is mandatory.
+
+Q: What is the difference between OAMP and Foreign Police?
+A: OAMP (Odbor azylové a migrační politiky) handles residence permits, extensions,
+   and biometrics. The Foreign Police handles border and registration matters.
+   Non-EU students go to OAMP. EU students (for stays over 30 days) go to the
+   Foreign Police. They are different offices in different locations.
+
+--- Q&A: BRIDGE LABEL ---
+
+Q: What is a Bridge Label (překlenovací štítek)?
+A: It is a physical stamp placed in your passport by OAMP confirming that your
+   extension application is pending and your stay is legal. You need it when your
+   current permit expires while your extension is still being processed. Without
+   it, you may not be able to re-enter the Czech Republic if you travel abroad.
+
+Q: My visa expired but I applied for extension — am I still legal?
+A: Yes, provided you submitted your extension application before the expiry date.
+   Your stay is legally "bridged." However, you should go to OAMP and request
+   the physical Bridge Label stamp so this is officially documented in your passport.
+
+--- Q&A: INSURANCE ---
+
+Q: What kind of insurance do I need for a Czech student visa?
+A: You need "Komplexní zdravotní pojištění cizinců" (Comprehensive Healthcare Insurance
+   for Foreigners). Travel insurance, emergency-only policies, and foreign health
+   insurance are NOT accepted. The main provider is PVZP (pvzp.cz).
+
+Q: Can I use my home country's health insurance in Czech Republic?
+A: No. Foreign insurance policies, even comprehensive ones, are not accepted for
+   Czech long-term residence permits. You must purchase Czech comprehensive insurance
+   from an approved Czech provider such as PVZP.
+
+================================================================================
+END OF FAQ BRIDGE — VER. 2026.2
+================================================================================
