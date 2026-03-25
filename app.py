@@ -1,17 +1,13 @@
 """
-app.py — ImmigraSmart Streamlit Application
-Improvements over v1:
-  - Uses ImmigraSmartChat (conversation memory + confidence guard)
-  - Per-message feedback buttons (thumbs up/down) for data collection
-  - Language auto-detection with multilingual welcome
-  - Official disclaimer banner
-  - Sidebar with quick links and last-updated info
-  - Graceful error handling with actionable fallback messages
+app.py — ImmigraSmart Streamlit Application  (v3)
+What's new vs v2:
+  - Displays a gentle PII notice when personal data was scrubbed
+  - Shows detected language badge next to user messages
+  - Passes (answer, meta) from ImmigraSmartChat.ask()
+  - All v2 features retained: feedback buttons, suggestions, sidebar, disclaimer
 """
 
 import os
-import json
-from datetime import datetime
 import streamlit as st
 
 # ── Page config MUST be first ──────────────────────────────────────────────────
@@ -19,21 +15,27 @@ st.set_page_config(
     page_title="ImmigraSmart AI",
     page_icon="🇨🇿",
     layout="centered",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 DB_PATH = "/tmp/vector_db"
 
+LANG_FLAGS = {
+    "cs": "🇨🇿", "sk": "🇸🇰", "es": "🇪🇸", "ar": "🇸🇦",
+    "uk": "🇺🇦", "ru": "🇷🇺", "vi": "🇻🇳", "zh": "🇨🇳",
+    "de": "🇩🇪", "fr": "🇫🇷", "en": "🇬🇧",
+}
+
 # ── Knowledge Base Init ────────────────────────────────────────────────────────
 if not os.path.exists(DB_PATH):
-    with st.spinner("⚙️ Initializing knowledge base (takes 1–2 min on first run)..."):
+    with st.spinner("⚙️ Initialising knowledge base (1–2 min on first run)..."):
         try:
             from src.ingest import main as run_ingest
             run_ingest()
             st.success("✅ Knowledge base ready!")
         except Exception as e:
-            st.error(f"Initialization failed: {e}")
-            st.info("Try refreshing the page, or check that your GOOGLE_API_KEY is set.")
+            st.error(f"Initialisation failed: {e}")
+            st.info("Refresh the page or check your GOOGLE_API_KEY.")
             st.stop()
 
 # ── Load Chat Engine ───────────────────────────────────────────────────────────
@@ -46,32 +48,31 @@ if "chat" not in st.session_state:
         st.stop()
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = []   # list of {role, content, meta}
 
 if "feedback" not in st.session_state:
-    st.session_state.feedback = {}  # {message_index: "up" | "down"}
+    st.session_state.feedback = {}   # {msg_index: "up"|"down"}
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg", width=80)
-    st.title("ImmigraSmart AI")
+    st.markdown("## 🇨🇿 ImmigraSmart AI")
     st.caption("Czech Republic Immigration Assistant")
-
     st.divider()
+
     st.markdown("**🔗 Official Resources**")
     st.markdown("- [OAMP Appointments](https://frs.gov.cz)")
     st.markdown("- [Info Portal for Foreigners](https://ipc.gov.cz)")
     st.markdown("- [PVZP Insurance](https://pvzp.cz)")
     st.markdown("- [Free Legal Aid — SIMI](https://migrace.com)")
     st.markdown("- [Free Legal Aid — OPU](https://opu.cz)")
-
     st.divider()
+
     st.markdown("**📞 Emergency Contact**")
     st.markdown("OAMP Info Line: **+420 974 801 801**")
-
     st.divider()
-    st.caption(f"Knowledge Base: Ver. 2026.2")
-    st.caption(f"Last Updated: January 2026")
+
+    st.caption("Knowledge Base: Ver. 2026.2")
+    st.caption("Last Updated: January 2026")
 
     if st.button("🗑️ Clear Conversation", use_container_width=True):
         st.session_state.messages = []
@@ -83,74 +84,109 @@ with st.sidebar:
 st.title("🇨🇿 ImmigraSmart AI")
 st.markdown("#### Your Czech Republic Immigration Assistant")
 
-# Disclaimer banner
 st.warning(
     "⚠️ **Disclaimer:** This tool provides general information only, not legal advice. "
-    "Always verify requirements with the official [OAMP office](https://frs.gov.cz) "
+    "Always verify with the official [OAMP office](https://frs.gov.cz) "
     "or a qualified immigration lawyer.",
-    icon="⚖️"
+    icon="⚖️",
 )
 
-# ── Quick-start suggestions ────────────────────────────────────────────────────
+# ── Quick-start suggestions (shown only on empty state) ───────────────────────
 if not st.session_state.messages:
     st.markdown("**💬 Try asking:**")
     suggestions = [
-        "How much money do I need to prove for a 12-month stay?",
-        "What should I do within 3 days of arriving in the Czech Republic?",
+        "How much money do I need for a 12-month stay?",
+        "What should I do within 3 days of arriving?",
         "When should I apply to extend my residence permit?",
         "What is a Bridge Label and when do I need one?",
         "Can I work while studying on a student permit?",
     ]
     cols = st.columns(2)
-    for i, suggestion in enumerate(suggestions):
-        if cols[i % 2].button(suggestion, key=f"suggestion_{i}", use_container_width=True):
-            st.session_state.pending_input = suggestion
+    for i, s in enumerate(suggestions):
+        if cols[i % 2].button(s, key=f"sug_{i}", use_container_width=True):
+            st.session_state.pending_input = s
             st.rerun()
 
 # ── Chat History Display ───────────────────────────────────────────────────────
 for idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
+
+        # Language badge on user messages
+        if msg["role"] == "user":
+            meta = msg.get("meta", {})
+            lang = meta.get("language", "en")
+            flag = LANG_FLAGS.get(lang, "🌐")
+            if lang != "en":
+                st.caption(f"{flag} Message detected in `{lang}`")
+
         st.markdown(msg["content"])
 
-        # Show feedback buttons only on assistant messages
+        # PII notice on user messages
+        if msg["role"] == "user":
+            meta = msg.get("meta", {})
+            if meta.get("pii_detected"):
+                entities = ", ".join(meta.get("pii_entities", []))
+                st.info(
+                    f"🔒 **Privacy notice:** I detected personal data "
+                    f"({entities}) in your message and removed it before "
+                    f"processing — it was never sent to the AI.",
+                    icon="🔒",
+                )
+
+        # Feedback buttons on assistant messages
         if msg["role"] == "assistant":
-            existing_feedback = st.session_state.feedback.get(idx)
-            if existing_feedback:
-                st.caption(f"{'👍 Helpful' if existing_feedback == 'up' else '👎 Not helpful'} — thank you!")
+            existing = st.session_state.feedback.get(idx)
+            if existing:
+                st.caption(f"{'👍 Helpful' if existing == 'up' else '👎 Not helpful'} — thank you!")
             else:
-                fb_col1, fb_col2, fb_col3 = st.columns([1, 1, 8])
-                if fb_col1.button("👍", key=f"up_{idx}", help="This was helpful"):
+                c1, c2, _ = st.columns([1, 1, 8])
+                if c1.button("👍", key=f"up_{idx}"):
                     st.session_state.feedback[idx] = "up"
                     st.rerun()
-                if fb_col2.button("👎", key=f"down_{idx}", help="This wasn't helpful"):
+                if c2.button("👎", key=f"down_{idx}"):
                     st.session_state.feedback[idx] = "down"
                     st.rerun()
 
-# ── Handle Pre-filled Input (from suggestion buttons) ─────────────────────────
+# ── Handle Pre-filled Input (suggestion buttons) ──────────────────────────────
 pending = st.session_state.pop("pending_input", None)
 
 # ── Chat Input ─────────────────────────────────────────────────────────────────
 user_input = st.chat_input("Ask about Czech visas, permits, deadlines...") or pending
 
 if user_input:
-    # Display user message
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    # ── Show user message immediately ─────────────────────────────────────────
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Generate response
+    # ── Generate response ──────────────────────────────────────────────────────
     with st.chat_message("assistant"):
         with st.spinner("Searching knowledge base..."):
             try:
-                answer = st.session_state.chat.ask(user_input)
+                answer, meta = st.session_state.chat.ask(user_input)
+
+                # Store user message WITH meta (for PII/lang badge on re-render)
+                st.session_state.messages.append({
+                    "role": "user",
+                    "content": user_input,
+                    "meta": meta,
+                })
+
                 st.markdown(answer)
-                st.session_state.messages.append({"role": "assistant", "content": answer})
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": answer,
+                    "meta": meta,
+                })
+
             except Exception as e:
-                err_msg = (
-                    "Sorry, I encountered an error. Please try again.\n\n"
-                    f"If this persists, contact OAMP at **+420 974 801 801**."
+                err = (
+                    "Sorry, something went wrong. Please try again.\n\n"
+                    "If this persists, contact OAMP at **+420 974 801 801**."
                 )
-                st.error(err_msg)
+                st.error(err)
                 st.caption(f"Technical detail: {e}")
+                st.session_state.messages.append({
+                    "role": "user", "content": user_input, "meta": {},
+                })
 
     st.rerun()
