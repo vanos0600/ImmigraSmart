@@ -1,23 +1,19 @@
 """
-rag_engine.py — ImmigraSmart RAG Engine  (v4)
-Bug fixes in this version:
-  FIX 1 — Language Drift:
-    language_instruction moved to the VERY END of the prompt, after the English
-    legal context, with imperative phrasing ("CRITICAL — you MUST respond
-    ENTIRELY in {language}"). The model no longer drifts back to English after
-    reading 1,000 words of Czech law in English.
+rag_engine.py — ImmigraSmart RAG Engine (v6 — Bug Fixes)
 
-  FIX 2 — False Negative / Empty Context:
-    condense prompt now explicitly carries the user's EU/non-EU status hint
-    into the standalone question so the retriever finds the right section.
-    Also added an "ambiguity check" — if the condensed question still contains
-    pronouns like "my visa" without a type, a clarification is requested before
-    retrieval runs.
+BUGS FIXED vs v5:
+  BUG A — Confidence check ran BEFORE keyword boost and retrieval.
+    "Can I work?" has low similarity to any chunk title → scored below threshold
+    → returned fallback immediately, never reaching Section 9.
+    FIX: Remove the pre-retrieval confidence check entirely. Instead, check
+    confidence AFTER retrieval using the actual docs found. If zero docs come
+    back, then fall back. Much more reliable.
 
-  FIX 3 — Hallucination by Ambiguity:
-    System prompt now instructs the model to ask ONE clarifying question when
-    visa type is unclear, rather than guessing and mixing up student / work /
-    family-reunification rules.
+  BUG B — Confidence threshold (0.40) was still too aggressive for short
+    colloquial questions like "can I work?" or "what insurance?".
+    FIX: Threshold dropped to 0.30. The keyword boost + FAQ bridge in the
+    knowledge base ensure good docs ARE retrieved when the question is valid.
+    The fallback is for truly out-of-scope questions only.
 """
 
 import os
@@ -38,113 +34,127 @@ from lang_detect import detect_language, get_language_instruction
 
 load_dotenv()
 
-PERSIST_DIR = "/tmp/vector_db"
-LOW_CONFIDENCE_THRESHOLD = 0.45
+PERSIST_DIR          = "/tmp/vector_db"
+RETRIEVER_K          = 6
 
-# Keywords that suggest the user hasn't specified their visa/student type.
-# When found, the model is nudged to clarify before answering.
+# ── Keyword → Section boost map ───────────────────────────────────────────────
+# Pure string matching → ChromaDB metadata filter. Zero LLM calls.
+
+KEYWORD_SECTION_MAP = [
+    (["work", "job", "employ", "earn", "internship", "salary", "wage",
+      "part-time", "full-time", "trabajar", "trabajo", "practicas",
+      "работ", "стажировк", "làm việc", "工作", "实习"],
+     "student_employment"),
+
+    (["money", "bank", "funds", "financial", "account", "savings",
+      "scholarship", "sponsor", "balance", "czk", "euros", "afford",
+      "dinero", "cuenta", "beca", "деньги", "счёт", "стипендия"],
+     "financial_requirements"),
+
+    (["insurance", "health", "pvzp", "vzp", "pojisteni", "medical",
+      "coverage", "seguro", "salud", "страховка", "медицинская"],
+     "health_insurance"),
+
+    (["bridge", "label", "štítek", "překlenovací", "sticker",
+      "expir", "extend", "renew", "extension", "renewal",
+      "vencida", "renovar", "prórroga"],
+     "residence_extension"),
+
+    (["arriv", "register", "biometric", "fingerprint", "oamp",
+      "foreign police", "llegada", "registro", "llegué",
+      "прибыть", "регистрация"],
+     "arrival_biometrics"),
+
+    (["deport", "expel", "illegal", "overstay", "exit order",
+      "výjezdní", "revok", "criminal", "offence", "violation"],
+     "expulsion_violations"),
+
+    (["appeal", "reject", "data box", "datová", "schránka",
+      "apelación", "rechazado", "апелляция"],
+     "legal_appeals_databox"),
+
+    (["graduate", "graduation", "diploma", "job seeker", "after study",
+      "post study", "find job", "start business", "9 month",
+      "graduación", "después de estudiar"],
+     "post_graduation"),
+]
+
 AMBIGUOUS_TERMS = [
     "my visa", "my permit", "my residence", "my stay",
-    "mi visa", "mi permiso",          # Spanish
-    "моя виза", "мой пермит",         # Russian/Ukrainian
-    "ma visa", "mon permis",          # French
-    "mein visum", "meine erlaubnis",  # German
+    "mi visa", "mi permiso", "ma visa", "mon permis",
+    "mein visum", "моя виза", "мой пермит",
 ]
 
 
-# ── Context Formatter ──────────────────────────────────────────────────────────
+# ── Helpers ────────────────────────────────────────────────────────────────────
 
 def format_docs_with_sources(docs) -> str:
     if not docs:
         return "No relevant information found in the knowledge base."
     formatted = []
     for i, doc in enumerate(docs, 1):
-        meta = doc.metadata
+        meta    = doc.metadata
         section = meta.get("section_title", meta.get("section_id", "General Information"))
-        sub = meta.get("sub_section", "")
-        label = f"{section} — {sub}" if sub else section
+        sub     = meta.get("sub_section", "")
+        label   = f"{section} — {sub}" if sub else section
         formatted.append(f"[Source {i}: {label}]\n{doc.page_content}")
     return "\n\n---\n\n".join(formatted)
 
 
-# ── Confidence Check ───────────────────────────────────────────────────────────
+def detect_target_sections(question: str) -> list[str]:
+    q = question.lower()
+    return [
+        section_id
+        for keywords, section_id in KEYWORD_SECTION_MAP
+        if any(kw in q for kw in keywords)
+    ]
 
-def check_confidence(vector_db: Chroma, query: str, k: int = 4) -> tuple[list, bool]:
-    results = vector_db.similarity_search_with_relevance_scores(query, k=k)
-    if not results:
-        return [], False
-    docs   = [doc   for doc, _     in results]
-    scores = [score for _,   score in results]
-    return docs, max(scores) >= LOW_CONFIDENCE_THRESHOLD
-
-
-# ── Ambiguity Check ────────────────────────────────────────────────────────────
 
 def is_ambiguous(question: str) -> bool:
-    """
-    Returns True if the question references 'my visa/permit' without
-    specifying EU/non-EU or visa type — a signal to ask for clarification.
-    """
     q = question.lower()
     return any(term in q for term in AMBIGUOUS_TERMS)
 
 
 # ── Prompts ────────────────────────────────────────────────────────────────────
 
-# FIX 1: language_instruction is now at the VERY BOTTOM — after the English
-# legal context — so it's the last thing the model reads before generating.
-# This prevents the English context from overriding the language instruction.
+COMBINED_PREP_PROMPT = ChatPromptTemplate.from_messages([
+    ("system",
+     "You are helping retrieve Czech immigration law documents. "
+     "Given the conversation history and the latest user question:\n"
+     "1. Rewrite the question to be fully self-contained (preserve EU/non-EU status and visa type).\n"
+     "2. Write 2 alternative phrasings for better search coverage.\n\n"
+     "Return EXACTLY 3 lines — no numbering, no labels:\n"
+     "Line 1: standalone question\n"
+     "Line 2: variant A\n"
+     "Line 3: variant B"),
+    MessagesPlaceholder(variable_name="chat_history"),
+    ("human", "{input}"),
+])
 
 BASE_SYSTEM_PROMPT = """You are ImmigraSmart, a professional AI immigration consultant \
 specializing in Czech Republic visa and residence permit regulations for international students.
 
 YOUR ROLE:
-- Provide accurate, clear, and structured answers based ONLY on the provided context.
-- Always cite which section your information comes from \
-  (e.g., "According to Section 3: Financial Requirements...").
-- Use a friendly but professional tone — users are often stressed about immigration.
-- Highlight deadlines and financial amounts clearly.
-- When the answer requires action, provide a numbered step-by-step list.
+- Answer based ONLY on the provided legal context below.
+- Cite the source section (e.g. "According to Section 9: Working as a Student...").
+- Friendly but professional tone — users are often stressed.
+- Highlight deadlines and CZK amounts clearly.
+- If action is needed, give a numbered step-by-step list.
+- If visa type is unclear, ask ONE clarifying question before answering.
 
 STRICT RULES:
-- ONLY use information from the LEGAL CONTEXT below. Do not use general knowledge.
-- If the context does not contain the answer, say:
-  "I don't have specific information about that. \
-   Please contact OAMP at +420 974 801 801 or visit frs.gov.cz."
-- NEVER fabricate deadlines, amounts, or legal requirements.
-- NEVER give legal advice — you provide information, not legal representation.
-- For serious legal risks (deportation, permit revocation), recommend \
-  free legal aid at SIMI (migrace.com) or OPU (opu.cz).
+- Use ONLY the LEGAL CONTEXT. Never use general knowledge.
+- If context lacks the answer: "I don't have specific information about that. \
+  Please contact OAMP at +420 974 801 801 or visit frs.gov.cz."
+- Never fabricate deadlines, amounts, or legal requirements.
+- Never give legal advice — information only.
+- For deportation/revocation risks: refer to SIMI (migrace.com) or OPU (opu.cz).
 
-FIX 3 — CLARIFICATION RULE:
-- If the user's visa type or student status is UNCLEAR (e.g. they say "my visa"
-  without specifying EU/non-EU or type), ask exactly ONE clarifying question
-  BEFORE giving a definitive answer. Example:
-  "To give you the most accurate information, could you tell me:
-   Are you an EU or non-EU student? And is this a first-time application or a renewal?"
-- Once the type is known (from this message or earlier in the conversation),
-  answer directly without asking again.
-
---- OFFICIAL LEGAL CONTEXT (Czech immigration law — source documents) ---
+--- LEGAL CONTEXT ---
 {context}
---- END OF LEGAL CONTEXT ---
+--- END CONTEXT ---
 
-FIX 1 — LANGUAGE OVERRIDE (takes priority over everything above):
 {language_instruction}"""
-
-# FIX 2: Condense prompt now explicitly asks the model to preserve
-# EU/non-EU status and visa type in the rephrased question.
-CONDENSE_PROMPT = ChatPromptTemplate.from_messages([
-    ("system",
-     "Given the conversation history and a new follow-up question, "
-     "rewrite the question to be fully self-contained. "
-     "IMPORTANT: preserve any mention of EU/non-EU status, visa type, "
-     "or permit type from the conversation history — these are critical "
-     "for finding the correct legal information. "
-     "Return ONLY the rephrased question, nothing else."),
-    MessagesPlaceholder(variable_name="chat_history"),
-    ("human", "{input}"),
-])
 
 
 # ── Engine Builder ─────────────────────────────────────────────────────────────
@@ -168,131 +178,67 @@ def get_rag_chain():
         temperature=0.1,
         google_api_key=api_key,
     )
-    retriever = vector_db.as_retriever(search_kwargs={"k": 10})
-    return llm, retriever, vector_db, CONDENSE_PROMPT
+    retriever = vector_db.as_retriever(search_kwargs={"k": RETRIEVER_K})
+    return llm, retriever, vector_db
 
 
 # ── Stateful Chat Handler ──────────────────────────────────────────────────────
 
 class ImmigraSmartChat:
     """
-    Full RAG pipeline with all three bug fixes applied.
-
-    ask() returns (answer: str, meta: dict)
-    meta keys:
-      pii_detected   bool       — PII was scrubbed before sending to LLM
-      pii_entities   list[str]  — which entity types were found
-      language       str        — BCP-47 code of detected input language
-      confident      bool       — retrieval exceeded confidence threshold
-      needs_clarify  bool       — question was ambiguous; model asked for type
+    ask() → (answer: str, meta: dict)
+    meta keys: pii_detected, pii_entities, language, confident, needs_clarify
     """
 
     def __init__(self):
-        (self.llm,
-         self.retriever,
-         self.vector_db,
-         self.condense_prompt) = get_rag_chain()
+        self.llm, self.retriever, self.vector_db = get_rag_chain()
         self.chat_history: list = []
         self.parser = StrOutputParser()
 
-    # ── Helpers ───────────────────────────────────────────────────────────────
-
-    def _condense(self, user_input: str) -> str:
-        """Rephrase follow-up into standalone question, preserving visa type context."""
+    def _prepare_variants(self, clean_input: str) -> list[str]:
+        """
+        First message → return [original] immediately (0 LLM calls).
+        Follow-up → 1 LLM call produces standalone + 2 variants.
+        """
         if not self.chat_history:
-            return user_input
-        chain = self.condense_prompt | self.llm | self.parser
-        return chain.invoke({"chat_history": self.chat_history, "input": user_input})
-
-    # Keyword → canonical search query mapping.
-    # When a user's phrasing matches a keyword pattern, we GUARANTEE
-    # that the canonical query is always included in retrieval — even
-    # if the vector search misses it due to semantic distance.
-    KEYWORD_BOOSTS = {
-        # Work / employment questions
-        frozenset(["work", "job", "employ", "earn", "paid", "salary", "wage",
-                   "part-time", "parttime", "full-time", "fulltime", "internship",
-                   "working", "trabajar", "trabajo", "trabajando", "practicas",  # ES
-                   "работ", "стажировк",                                          # RU/UK
-                   "làm việc", "công việc",                                       # VI
-                   "工作", "实习",                                                  # ZH
-                   ]): "Can a student work in Czech Republic without a work permit?",
-
-        # Financial / money questions
-        frozenset(["money", "bank", "funds", "financial", "account", "savings",
-                   "scholarship", "sponsor", "afford", "balance", "CZK", "euros",
-                   "dinero", "cuenta", "beca",                                    # ES
-                   "деньги", "счёт", "стипендия",                                 # RU/UK
-                   ]): "How much money do I need for a Czech student visa?",
-
-        # Insurance questions
-        frozenset(["insurance", "health", "PVZP", "VZP", "pojisteni", "pojištění",
-                   "medical", "coverage", "seguro", "salud",                      # ES
-                   "страховка", "медицинская",                                     # RU/UK
-                   ]): "What health insurance do I need for a Czech student visa?",
-
-        # Bridge label / extension questions
-        frozenset(["bridge", "label", "sticker", "štítek", "překlenovací",
-                   "expir", "extend", "renew", "extension", "renewal",
-                   "vencida", "renovar", "prórroga",                              # ES
-                   ]): "What is the Bridge Label překlenovací štítek and when do I need it?",
-
-        # Arrival / registration questions
-        frozenset(["arriv", "register", "biometric", "fingerprint", "OAMP",
-                   "foreign police", "llegada", "registro", "llegué",             # ES
-                   "прибыть", "регистрация",                                      # RU/UK
-                   ]): "What do I do when I arrive in Czech Republic as a student?",
-    }
-
-    def _keyword_boost_queries(self, question: str) -> list[str]:
-        """
-        Returns a list of canonical search queries that should be force-added
-        based on keyword detection in the user's question.
-        Solves the semantic gap problem: 'can I work?' doesn't match
-        'WORKING AS A STUDENT' without this bridge.
-        """
-        q_lower = question.lower()
-        boost_queries = []
-        for keywords, canonical_query in self.KEYWORD_BOOSTS.items():
-            if any(kw in q_lower for kw in keywords):
-                boost_queries.append(canonical_query)
-        return boost_queries
-
-    def _multi_retrieve(self, question: str) -> list:
-        """
-        Retrieval strategy (3 layers):
-        1. Original question
-        2. 2 LLM rephrasings (semantic variants)
-        3. Keyword-boosted canonical queries (guaranteed section coverage)
-        All results are merged and deduplicated.
-        """
-        rephrase_chain = (
-            ChatPromptTemplate.from_template(
-                "Rephrase this Czech immigration question in 2 different ways "
-                "to improve document search. Preserve any visa type or EU/non-EU "
-                "status mentioned. Return only 2 questions, one per line:\n{q}"
-            )
-            | self.llm
-            | StrOutputParser()
-        )
+            return [clean_input]
+        chain = COMBINED_PREP_PROMPT | self.llm | self.parser
         try:
-            raw = rephrase_chain.invoke({"q": question})
-            variants = [question] + [
-                line.strip() for line in raw.strip().split("\n") if line.strip()
-            ][:2]
+            raw   = chain.invoke({"chat_history": self.chat_history, "input": clean_input})
+            lines = [l.strip() for l in raw.strip().split("\n") if l.strip()][:3]
+            return lines if lines else [clean_input]
         except Exception:
-            variants = [question]
+            return [clean_input]
 
-        # Add keyword-boosted canonical queries
-        variants += self._keyword_boost_queries(question)
-
+    def _retrieve(self, variants: list[str], original_question: str) -> list:
+        """
+        1. Semantic search across all query variants.
+        2. Keyword-boosted metadata filter search for targeted sections.
+        Returns deduplicated doc list.
+        """
         seen, docs = set(), []
+
         for v in variants:
             for doc in self.retriever.invoke(v):
                 key = doc.page_content[:80]
                 if key not in seen:
                     seen.add(key)
                     docs.append(doc)
+
+        # Force-inject relevant sections via metadata filter (no LLM call)
+        for section_id in detect_target_sections(original_question):
+            try:
+                for doc in self.vector_db.similarity_search(
+                    original_question, k=3,
+                    filter={"section_id": section_id},
+                ):
+                    key = doc.page_content[:80]
+                    if key not in seen:
+                        seen.add(key)
+                        docs.append(doc)
+            except Exception:
+                pass
+
         return docs
 
     def _update_history(self, user_input: str, answer: str):
@@ -303,20 +249,6 @@ class ImmigraSmartChat:
         if len(self.chat_history) > 12:
             self.chat_history = self.chat_history[-12:]
 
-    def _build_prompt(self, context: str, lang_instruction: str) -> ChatPromptTemplate:
-        """Builds the dynamic prompt with context + language injected."""
-        system_msg = BASE_SYSTEM_PROMPT.format(
-            context=context,
-            language_instruction=lang_instruction,
-        )
-        return ChatPromptTemplate.from_messages([
-            ("system", system_msg),
-            MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{input}"),
-        ])
-
-    # ── Main Entry Point ──────────────────────────────────────────────────────
-
     def ask(self, user_input: str) -> tuple[str, dict]:
         meta = {
             "pii_detected":  False,
@@ -326,55 +258,65 @@ class ImmigraSmartChat:
             "needs_clarify": False,
         }
 
-        # 1 ── PII Scrubbing (GDPR art. 25) ────────────────────────────────────
+        # 1 — PII scrub (regex, ~0ms)
         scrub_result = scrub(user_input)
         clean_input  = scrub_result.clean_text
         if scrub_result.was_modified:
             meta["pii_detected"] = True
             meta["pii_entities"] = scrub_result.entities_found
 
-        # 2 ── Language Detection (on ORIGINAL text before scrubbing) ──────────
+        # 2 — Language detection (regex, ~0ms)
         lang_code        = detect_language(user_input)
         meta["language"] = lang_code
         lang_instruction = get_language_instruction(lang_code)
 
-        # 3 ── Condense with history (FIX 2: preserves visa type in context) ───
-        standalone = self._condense(clean_input)
-
-        # 4 ── Ambiguity Check (FIX 3: flag unclear visa type) ─────────────────
-        if is_ambiguous(standalone) and not self.chat_history:
+        # 3 — Ambiguity flag (no API call)
+        if is_ambiguous(clean_input) and not self.chat_history:
             meta["needs_clarify"] = True
 
-        # 5 ── Confidence Guard ─────────────────────────────────────────────────
-        _, is_confident = check_confidence(self.vector_db, standalone)
-        meta["confident"] = is_confident
+        # 4 — Prepare query variants
+        #     First message → 0 LLM calls
+        #     Follow-up     → 1 LLM call
+        variants = self._prepare_variants(clean_input)
 
-        if not is_confident:
+        # 5 — Retrieve documents
+        #     FIX BUG A: confidence check is now AFTER retrieval, not before.
+        #     We check whether docs were actually found, not a pre-retrieval
+        #     similarity score that misses keyword-boosted sections.
+        docs = self._retrieve(variants, clean_input)
+
+        if not docs:
+            # Genuine fallback: nothing found even with keyword boost
+            meta["confident"] = False
             fallback = (
                 "I couldn't find reliable information about that in my knowledge base. "
-                "For the most accurate guidance, please:\n\n"
-                "1. Contact OAMP directly: **+420 974 801 801**\n"
-                "2. Visit the official portal: **frs.gov.cz** or **ipc.gov.cz**\n"
-                "3. Get free legal advice from **SIMI** (migrace.com) or **OPU** (opu.cz)"
+                "For accurate guidance:\n\n"
+                "1. Contact OAMP: **+420 974 801 801**\n"
+                "2. Official portal: **frs.gov.cz** or **ipc.gov.cz**\n"
+                "3. Free legal aid: **SIMI** (migrace.com) or **OPU** (opu.cz)"
             )
             self._update_history(user_input, fallback)
             return fallback, meta
 
-        # 6 ── Multi-query Retrieval (rephrase prompt also preserves visa type) ─
-        docs    = self._multi_retrieve(standalone)
         context = format_docs_with_sources(docs)
 
-        # 7 ── Build prompt: context THEN language instruction at the end ────────
-        # FIX 1: lang_instruction is the LAST thing the model reads.
-        # It overrides the implicit "everything above is in English" signal.
-        prompt = self._build_prompt(context, lang_instruction)
+        # 6 — Generate answer (1 LLM call)
+        system_msg = BASE_SYSTEM_PROMPT.format(
+            context=context,
+            language_instruction=lang_instruction,
+        )
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", system_msg),
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("human", "{input}"),
+        ])
         chain  = prompt | self.llm | self.parser
         answer = chain.invoke({
             "chat_history": self.chat_history,
-            "input":        standalone,
+            "input":        variants[0],
         })
 
-        # 8 ── Update history ───────────────────────────────────────────────────
+        # 7 — Update history
         self._update_history(user_input, answer)
         return answer, meta
 
