@@ -1,5 +1,18 @@
+import sys
 import os
 import streamlit as st
+
+# 1. EL TRUCO DE MAGIA: Le decimos a Python que mire dentro de la carpeta 'src'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(current_dir, "src")
+sys.path.append(src_dir)
+
+# 2. Ahora sí, Python ya puede ver los archivos que están dentro de 'src'
+try:
+    from rag_engine import ImmigraSmartChat
+except Exception as e:
+    st.error(f"Error importing RAG Engine: {e}")
+    st.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. PAGE CONFIGURATION
@@ -11,6 +24,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
+
+# Minimal CSS just for metadata badges
+st.markdown("""
+<style>
+    .badge-lang { background: #DBEAFE; color: #1E40AF; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; }
+    .badge-pii  { background: #EDF7F2; color: #1B6B3A; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; }
+</style>
+""", unsafe_allow_html=True)
 # Minimal CSS just for metadata badges
 st.markdown("""
 <style>
