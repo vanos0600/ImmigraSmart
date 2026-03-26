@@ -42,7 +42,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. CONSTANTS & RESOURCES
+# 1.1 CONSTANTS & RESOURCES
 # ─────────────────────────────────────────────────────────────────────────────
 RESOURCES = [
     ("🏛️", "Ministry of Interior (OAMP)", "https://frs.gov.cz/en/"),
@@ -58,6 +58,40 @@ SUGGESTIONS = [
     "📅 Deadline to apply for permit extension",
     "💼 Can I work on a student residence permit?"
 ]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. INITIALIZE BACKEND (RAG ENGINE) & STATE
+# ─────────────────────────────────────────────────────────────────────────────
+if "messages" not in st.session_state: 
+    st.session_state.messages = []
+if "pending_input" not in st.session_state:
+    st.session_state.pending_input = None
+
+# INYECCIÓN DE SECRETS PARA LA NUBE:
+# Si estamos en Streamlit Cloud, tomamos la API key de los secrets y la ponemos en el entorno
+if "GOOGLE_API_KEY" in st.secrets:
+    os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
+
+# Intentamos cargar tu motor.
+if "chat_engine" not in st.session_state:
+    try:
+        # Si la base de datos NO existe, la construimos automáticamente
+        if not os.path.exists("/tmp/vector_db"):
+            with st.spinner("⏳ Cloud Deployment Detected: Building knowledge base for the first time. This will take a minute..."):
+                # Importamos tu script de ingestión y lo corremos
+                from ingest import main as run_ingestion
+                run_ingestion(force=True)
+                st.toast("✅ Knowledge Base built successfully!")
+                
+        # Una vez que estamos seguros de que existe, cargamos el cerebro
+        from rag_engine import ImmigraSmartChat
+        st.session_state.chat_engine = ImmigraSmartChat()
+        
+    except Exception as e:
+        st.error(f"🚨 **System Initialization Error:** {e}")
+        with st.expander("Ver detalles del error"):
+            st.code(str(e))
+        st.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. INITIALIZE BACKEND (RAG ENGINE) & STATE
