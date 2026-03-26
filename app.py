@@ -96,19 +96,27 @@ with st.sidebar:
 
     st.divider()
     
+    # 🔗 Enlaces (¡Ahora sí están alineados adentro del sidebar!)
     st.subheader("🔗 Essential Portals")
     for ico, name, url in RESOURCES:
         st.markdown(f"{ico} [{name}]({url})")
-        
+
     st.divider()
-    
+
+    # 🚨 Tarjeta de Emergencia unificada en un solo bloque para que se vea como una tarjeta roja
     st.error("""
     🚨 **OAMP Helpline**
-    **+420 974 801 801**
-    Mon–Thurs: 08:00–16:00
-    Friday: 08:00–12:00
+    
+    **Calls: +420 974 801 801**
+    
+    **Operating Hours:**
+    Mon–Thurs: 08:00–16:00  and Friday: 08:00–12:00
+             
+    **For urgent assistance with residence permits, visas, or legal issues, contact the OAMP helpline.**
     """)
 
+    st.divider()
+    
     st.success("🟢 Knowledge Base: Active (ChromaDB)")
 
 # ─────────────────────────────────────────────────────────────────────────────
