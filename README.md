@@ -302,7 +302,7 @@ Contributions are welcome — especially from Czech immigration lawyers, interna
 
 Built this because I needed it. Sharing it because others do too.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](https://www.linkedin.com/in/oskar-vanegas-59301b322/)
+[![LinkedIn](https://www.linkedin.com/in/oskar-david-vanegas-juarez-59301b322/?locale=en)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?logo=github)](https://github.com/vanos0600)
 
 ---

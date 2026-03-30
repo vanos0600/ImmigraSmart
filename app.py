@@ -2,20 +2,8 @@ import sys
 import os
 import streamlit as st
 
-# 1. EL TRUCO DE MAGIA: Le decimos a Python que mire dentro de la carpeta 'src'
-current_dir = os.path.dirname(os.path.abspath(__file__))
-src_dir = os.path.join(current_dir, "src")
-sys.path.append(src_dir)
-
-# 2. Ahora sí, Python ya puede ver los archivos que están dentro de 'src'
-try:
-    from rag_engine import ImmigraSmartChat
-except Exception as e:
-    st.error(f"Error importing RAG Engine: {e}")
-    st.stop()
-
 # ─────────────────────────────────────────────────────────────────────────────
-# 1. PAGE CONFIGURATION
+# 1. PAGE CONFIGURATION (¡Debe ser siempre lo primero!)
 # ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="ImmigraSmart — Czech Republic",
@@ -24,15 +12,13 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. PATH SETUP (Conectamos con la carpeta src)
+# ─────────────────────────────────────────────────────────────────────────────
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(current_dir, "src")
+sys.path.append(src_dir)
 
-
-# Minimal CSS just for metadata badges
-st.markdown("""
-<style>
-    .badge-lang { background: #DBEAFE; color: #1E40AF; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; }
-    .badge-pii  { background: #EDF7F2; color: #1B6B3A; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; }
-</style>
-""", unsafe_allow_html=True)
 # Minimal CSS just for metadata badges
 st.markdown("""
 <style>
@@ -42,7 +28,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 1.1 CONSTANTS & RESOURCES
+# 3. CONSTANTS & RESOURCES
 # ─────────────────────────────────────────────────────────────────────────────
 RESOURCES = [
     ("🏛️", "Ministry of Interior (OAMP)", "https://frs.gov.cz/en/"),
@@ -60,7 +46,7 @@ SUGGESTIONS = [
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. INITIALIZE BACKEND (RAG ENGINE) & STATE
+# 4. INITIALIZE BACKEND (RAG ENGINE) & STATE
 # ─────────────────────────────────────────────────────────────────────────────
 if "messages" not in st.session_state: 
     st.session_state.messages = []
@@ -68,9 +54,11 @@ if "pending_input" not in st.session_state:
     st.session_state.pending_input = None
 
 # INYECCIÓN DE SECRETS PARA LA NUBE:
-# Si estamos en Streamlit Cloud, tomamos la API key de los secrets y la ponemos en el entorno
-if "GOOGLE_API_KEY" in st.secrets:
-    os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
+try:
+    if "GOOGLE_API_KEY" in st.secrets:
+        os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
+except Exception:
+    pass # Si no hay archivo secrets (porque estamos en local), usa el .env normal
 
 # Intentamos cargar tu motor.
 if "chat_engine" not in st.session_state:
@@ -94,30 +82,7 @@ if "chat_engine" not in st.session_state:
         st.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 3. INITIALIZE BACKEND (RAG ENGINE) & STATE
-# ─────────────────────────────────────────────────────────────────────────────
-if "messages" not in st.session_state: 
-    st.session_state.messages = []
-if "pending_input" not in st.session_state:
-    st.session_state.pending_input = None
-
-# Intentamos cargar tu motor. Si falla, avisamos amigablemente.
-if "chat_engine" not in st.session_state:
-    try:
-        from rag_engine import ImmigraSmartChat
-        # Verificamos que la base de datos exista antes de arrancar
-        if not os.path.exists("/tmp/vector_db"):
-            st.error("🚨 **Database Missing:** The knowledge base hasn't been built yet.")
-            st.info("Please run `python ingest.py` in your terminal first to load the legal documents, then refresh this page.")
-            st.stop()
-            
-        st.session_state.chat_engine = ImmigraSmartChat()
-    except Exception as e:
-        st.error(f"🚨 **System Initialization Error:** {e}")
-        st.stop()
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 4. SIDEBAR NAVIGATION & INFO
+# 5. SIDEBAR NAVIGATION & INFO
 # ─────────────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.title("🇨🇿 ImmigraSmart")
@@ -130,14 +95,12 @@ with st.sidebar:
 
     st.divider()
     
-    # 🔗 Enlaces (¡Ahora sí están alineados adentro del sidebar!)
     st.subheader("🔗 Essential Portals")
     for ico, name, url in RESOURCES:
         st.markdown(f"{ico} [{name}]({url})")
 
     st.divider()
 
-    # 🚨 Tarjeta de Emergencia unificada en un solo bloque para que se vea como una tarjeta roja
     st.error("""
     🚨 **OAMP Helpline**
     
@@ -145,7 +108,7 @@ with st.sidebar:
     
     **Operating Hours:**
     Mon–Thurs: 08:00–16:00  and Friday: 08:00–12:00
-             
+              
     **For urgent assistance with residence permits, visas, or legal issues, contact the OAMP helpline.**
     """)
 
@@ -154,7 +117,7 @@ with st.sidebar:
     st.success("🟢 Knowledge Base: Active (ChromaDB)")
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 5. MAIN CONTENT HEADER
+# 6. MAIN CONTENT HEADER
 # ─────────────────────────────────────────────────────────────────────────────
 st.caption("🇨🇿 CZECH REPUBLIC · OFFICIAL IMMIGRATION GUIDANCE")
 st.title("ImmigraSmart AI")
@@ -163,7 +126,7 @@ st.markdown("Your AI-powered guide for navigating visas, residence permits, and 
 st.warning("⚠️ **Important notice:** This assistant provides general guidance based on public documents — not legal advice. Always verify with [OAMP](https://frs.gov.cz) before acting.")
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 6. EMPTY STATE & SUGGESTIONS
+# 7. EMPTY STATE & SUGGESTIONS
 # ─────────────────────────────────────────────────────────────────────────────
 if not st.session_state.messages:
     st.info("🏛️ **How can I help you today?**\nAsk about visas, residence permits, health insurance, or financial requirements.")
@@ -177,7 +140,7 @@ if not st.session_state.messages:
                 st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 7. CHAT HISTORY DISPLAY
+# 8. CHAT HISTORY DISPLAY
 # ─────────────────────────────────────────────────────────────────────────────
 for i, msg in enumerate(st.session_state.messages):
     avatar = "🧑‍💼" if msg["role"] == "user" else "🏛️"
@@ -203,7 +166,7 @@ for i, msg in enumerate(st.session_state.messages):
                 st.toast("Thanks for the feedback! It helps improve the AI.", icon="✅")
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 8. CHAT INPUT LOGIC
+# 9. CHAT INPUT LOGIC
 # ─────────────────────────────────────────────────────────────────────────────
 user_query = st.chat_input("Ask about visas, permits, insurance...")
 

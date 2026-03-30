@@ -1,19 +1,24 @@
 """
-rag_engine.py — ImmigraSmart RAG Engine (v6 — Bug Fixes)
+rag_engine.py — ImmigraSmart RAG Engine (v7 — Language Response Fix)
 
-BUGS FIXED vs v5:
-  BUG A — Confidence check ran BEFORE keyword boost and retrieval.
-    "Can I work?" has low similarity to any chunk title → scored below threshold
-    → returned fallback immediately, never reaching Section 9.
-    FIX: Remove the pre-retrieval confidence check entirely. Instead, check
-    confidence AFTER retrieval using the actual docs found. If zero docs come
-    back, then fall back. Much more reliable.
+BUGS FIXED vs v6:
+  BUG C — COMBINED_PREP_PROMPT rewrote follow-up questions without any
+    language instruction. When a user wrote in Czech, the prep LLM would
+    rewrite the standalone question in English (since the knowledge base is
+    in English). The final answer LLM then received an English question as
+    its "human" turn and — despite the language_instruction in the system
+    prompt — defaulted to responding in English.
+    FIX: Added explicit note in COMBINED_PREP_PROMPT that rewriting must be
+    in English for internal search purposes only, keeping retrieval correct
+    while making the intent clear.
 
-  BUG B — Confidence threshold (0.40) was still too aggressive for short
-    colloquial questions like "can I work?" or "what insurance?".
-    FIX: Threshold dropped to 0.30. The keyword boost + FAQ bridge in the
-    knowledge base ensure good docs ARE retrieved when the question is valid.
-    The fallback is for truly out-of-scope questions only.
+  BUG D — chain.invoke() passed `variants[0]` (the English-rewritten query)
+    as the human turn in the answer prompt. The LLM anchors its response
+    language to the human turn, not the system prompt, so English query →
+    English answer regardless of language_instruction.
+    FIX: chain.invoke() now passes `clean_input` (the original user message
+    with PII removed, in the user's language) as the human turn. variants
+    are used ONLY for retrieval, never for the final answer generation.
 """
 
 import os
@@ -117,12 +122,18 @@ def is_ambiguous(question: str) -> bool:
 
 # ── Prompts ────────────────────────────────────────────────────────────────────
 
+# FIX BUG C: Added explicit note that rewriting is for internal retrieval
+# in English only. This prevents the prep LLM from rewriting Czech/Spanish/etc.
+# questions in a way that would confuse the answer LLM's language choice.
 COMBINED_PREP_PROMPT = ChatPromptTemplate.from_messages([
     ("system",
      "You are helping retrieve Czech immigration law documents. "
      "Given the conversation history and the latest user question:\n"
      "1. Rewrite the question to be fully self-contained (preserve EU/non-EU status and visa type).\n"
      "2. Write 2 alternative phrasings for better search coverage.\n\n"
+     "IMPORTANT: Always rewrite in English — these variants are for internal "
+     "vector search only and are NEVER shown to the user. The user's original "
+     "language is handled separately for the final response.\n\n"
      "Return EXACTLY 3 lines — no numbering, no labels:\n"
      "Line 1: standalone question\n"
      "Line 2: variant A\n"
@@ -144,6 +155,7 @@ YOUR ROLE:
 
 STRICT RULES:
 - Use ONLY the LEGAL CONTEXT. Never use general knowledge.
+- TRANSLATION MANDATORY: The provided context is in English, but you MUST freely translate your final answer into the user's language without apologizing. Translating does NOT violate the rule of using only the provided context.
 - If context lacks the answer: "I don't have specific information about that. \
   Please contact OAMP at +420 974 801 801 or visit frs.gov.cz."
 - Never fabricate deadlines, amounts, or legal requirements.
@@ -155,7 +167,6 @@ STRICT RULES:
 --- END CONTEXT ---
 
 {language_instruction}"""
-
 
 # ── Engine Builder ─────────────────────────────────────────────────────────────
 
@@ -198,7 +209,8 @@ class ImmigraSmartChat:
     def _prepare_variants(self, clean_input: str) -> list[str]:
         """
         First message → return [original] immediately (0 LLM calls).
-        Follow-up → 1 LLM call produces standalone + 2 variants.
+        Follow-up → 1 LLM call produces standalone + 2 variants (always in English
+        for retrieval purposes — see COMBINED_PREP_PROMPT for rationale).
         """
         if not self.chat_history:
             return [clean_input]
@@ -274,15 +286,15 @@ class ImmigraSmartChat:
         if is_ambiguous(clean_input) and not self.chat_history:
             meta["needs_clarify"] = True
 
-        # 4 — Prepare query variants
+        # 4 — Prepare query variants for retrieval
         #     First message → 0 LLM calls
-        #     Follow-up     → 1 LLM call
+        #     Follow-up     → 1 LLM call (variants are always in English for
+        #                     vector search; original language preserved in
+        #                     clean_input for the answer step below)
         variants = self._prepare_variants(clean_input)
 
         # 5 — Retrieve documents
-        #     FIX BUG A: confidence check is now AFTER retrieval, not before.
-        #     We check whether docs were actually found, not a pre-retrieval
-        #     similarity score that misses keyword-boosted sections.
+        #     FIX BUG A (v6): confidence check is AFTER retrieval.
         docs = self._retrieve(variants, clean_input)
 
         if not docs:
@@ -301,6 +313,11 @@ class ImmigraSmartChat:
         context = format_docs_with_sources(docs)
 
         # 6 — Generate answer (1 LLM call)
+        #     FIX BUG D: Pass `clean_input` (user's original language, PII-scrubbed)
+        #     as the human turn — NOT variants[0] (which is the English rewrite used
+        #     for retrieval). The LLM anchors response language to the human turn,
+        #     so sending an English query here caused English responses even when
+        #     language_instruction said to respond in Czech/Spanish/etc.
         system_msg = BASE_SYSTEM_PROMPT.format(
             context=context,
             language_instruction=lang_instruction,
@@ -313,7 +330,7 @@ class ImmigraSmartChat:
         chain  = prompt | self.llm | self.parser
         answer = chain.invoke({
             "chat_history": self.chat_history,
-            "input":        variants[0],
+            "input":        clean_input,   # FIX BUG D: was variants[0]
         })
 
         # 7 — Update history
