@@ -20,6 +20,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.documents import Document
 
+from database import ChatDatabase  # Asegúrate de que la ruta sea correcta
+
 # SOLO IMPORTAMOS BM25 (Despedimos a EnsembleRetriever)
 from langchain_community.retrievers import BM25Retriever
 
@@ -87,7 +89,6 @@ YOUR ROLE:
 STRICT RULES:
 - You MUST answer in the EXACT SAME LANGUAGE that the user used in their question. If they ask in English, reply in English. If they ask in Spanish, reply in Spanish. Do not let currencies like "CZK" confuse your language detection.
 - Use ONLY the LEGAL CONTEXT. Never use general knowledge.
-- TRANSLATION MANDATORY: The provided context is in English, but you MUST freely translate your final answer into the user's language without apologizing.
 - If context lacks the answer: "I don't have specific information about that. \
   Please contact OAMP at +420 974 801 801 or visit frs.gov.cz."
 - Never fabricate deadlines, amounts, or legal requirements.
@@ -151,10 +152,18 @@ def get_rag_chain():
 # ── Stateful Chat Handler ──────────────────────────────────────────────────────
 
 class ImmigraSmartChat:
-    def __init__(self):
-        # Ahora recibimos una LISTA de retrievers
+    def __init__(self, session_id: str = "default_user"):
+        # 1. Cargamos el motor (LLM, Retrievers, DB)
         self.llm, self.retrievers_list, self.vector_db = get_rag_chain()
-        self.chat_history: list = []
+        
+        # 2. Conectamos con Supabase
+        self.db = ChatDatabase()
+        self.session_id = session_id
+        
+        # 3. 🚀 ¡NUEVO! Cargamos el historial real desde la nube al iniciar
+        # En lugar de empezar con [], empezamos con lo que diga Supabase
+        self.chat_history = self.db.load_history(self.session_id)
+        
         self.parser = StrOutputParser()
 
     def _prepare_variants(self, clean_input: str) -> list[str]:
@@ -169,7 +178,6 @@ class ImmigraSmartChat:
             return [clean_input]
 
     def _retrieve(self, variants: list[str]) -> list:
-        # 🚀 CUSTOM HYBRID SEARCH: Disparamos todos los motores y juntamos resultados
         seen, docs = set(), []
         for v in variants:
             for retriever in self.retrievers_list:
@@ -181,10 +189,18 @@ class ImmigraSmartChat:
         return docs
 
     def _update_history(self, user_input: str, answer: str):
+        # 1. Guardamos en la lista local de Python (para la respuesta actual)
         self.chat_history.extend([
             HumanMessage(content=user_input),
             AIMessage(content=answer),
         ])
+        
+        # 2. 🚀 ¡NUEVO! Guardamos permanentemente en la nube de Supabase
+        # Esto hace que si el usuario refresca la página, el chat siga ahí
+        self.db.save_message(self.session_id, "user", user_input)
+        self.db.save_message(self.session_id, "assistant", answer)
+
+        # Mantenemos la memoria local corta para no confundir al LLM
         if len(self.chat_history) > 12:
             self.chat_history = self.chat_history[-12:]
 
@@ -216,7 +232,7 @@ class ImmigraSmartChat:
         # 4 — Prepare query variants
         variants = self._prepare_variants(clean_input)
 
-        # 5 — Retrieve documents (AHORA USANDO NUESTRO MOTOR HÍBRIDO CUSTOM)
+        # 5 — Retrieve documents (HYBRID)
         docs = self._retrieve(variants)
 
         if not docs:
@@ -232,12 +248,10 @@ class ImmigraSmartChat:
 
         context = format_docs_with_sources(docs)
 
-        # Inyección del documento del usuario (PDF)
         doc_section = ""
         if user_document:
             doc_section = (
                 "--- USER UPLOADED DOCUMENT ---\n"
-                "The user has uploaded a personal document. Here is the text extracted from it:\n\n"
                 f"{user_document}\n\n"
                 "--- END USER DOCUMENT ---\n"
                 "Please analyze the user's query in the context of BOTH the legal rules above and their uploaded document."
@@ -261,8 +275,11 @@ class ImmigraSmartChat:
             "input":        clean_input,
         })
 
+        # Al final de la respuesta, disparamos la actualización a Supabase
         self._update_history(user_input, answer)
         return answer, meta
 
     def reset(self):
+        # Opcional: Si reseteas el chat, podrías querer borrarlo de la DB 
+        # o simplemente limpiar la memoria local. Por ahora solo local:
         self.chat_history = []

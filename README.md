@@ -9,6 +9,7 @@
 ![LangChain](https://img.shields.io/badge/LangChain-0.2+-1C3C3C?logo=chainlink)
 ![Gemini](https://img.shields.io/badge/Gemini_2.5_Flash-Google_AI-4285F4?logo=google)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_DB-FF6B35)
+![Supabase](https://img.shields.io/badge/Supabase-Cloud_DB-3ECF8E?logo=supabase)
 ![GDPR](https://img.shields.io/badge/GDPR-Compliant-003399)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
@@ -26,66 +27,59 @@
 
 Moving to the Czech Republic as an international student means dealing with:
 
-- Strict legal deadlines (miss one and your permit can be cancelled)
+- Strict legal deadlines — miss one and your permit can be cancelled
 - Complex documents written in Czech legalese
-- Multiple government offices — OAMP, Foreign Police, Czech POINT — that are easy to confuse
+- Multiple government offices (OAMP, Foreign Police, Czech POINT) that are easy to confuse
 - Language barriers at every step
 - No single place that answers all your questions accurately
 
-**ImmigraSmart solves this.** It is a RAG (Retrieval-Augmented Generation) application that answers immigration questions using only verified official sources — no hallucinations, no guesswork, full GDPR compliance.
+**ImmigraSmart solves this.** It is a production-grade RAG (Retrieval-Augmented Generation) application that answers immigration questions using only verified official sources — no hallucinations, no guesswork, full GDPR compliance, and now with persistent cloud memory and hybrid search.
 
 ---
 
-## ✨ Feature Overview
+## ✨ Features
 
 | Feature | Description |
 |---|---|
-| 🧠 **Conversation Memory** | Remembers your session context — ask follow-ups naturally |
-| 🔍 **Multi-Query Retrieval** | Generates query variants + keyword boosts to guarantee the right section is found |
-| 🗂️ **Section-Aware Chunking** | Legal sections stay intact — no mid-sentence splits in the vector DB |
-| 🔒 **PII Scrubbing (GDPR)** | Strips passport numbers, IBANs, emails, phone numbers before any text reaches the LLM |
-| 🌍 **11-Language Detection** | Auto-detects language and responds in Spanish, Ukrainian, Arabic, Chinese, and more |
-| 🛡️ **Confidence Guard** | Returns OAMP contact details instead of guessing when no relevant docs are found |
-| 📎 **Source Citations** | Every answer references which knowledge base section it came from |
-| 📊 **User Feedback** | Per-answer thumbs up/down for quality tracking |
-| ♻️ **Smart Re-ingestion** | File hash caching — only rebuilds the vector DB when source files actually change |
+| ☁️ **Persistent Cloud Memory** | Integrated with Supabase. Chat history is saved via UUID sessions — refreshing the page no longer wipes your conversation. |
+| 🔎 **Hybrid Search (RAG v9.1)** | Combines BM25 (keyword) + ChromaDB (semantic) retrieval in parallel. Legal terms like "Bridge Label" or "VZP" are always found, even when embeddings alone would miss them. |
+| 📄 **Document Analysis** | Students can upload their own lease or insurance contracts (PDF). The AI analyzes them against the 2026 legal framework in real-time. |
+| 🔒 **PII Scrubbing (GDPR)** | Regex layer strips passport numbers, IBANs, rodné číslo, and phone numbers before any text reaches the LLM. |
+| 🌍 **11-Language Detection** | Auto-detects and responds in the user's language (Czech, Spanish, Ukrainian, Arabic, and more) while citing English legal sources. |
+| 📚 **Structured Knowledge Base** | 11 sections covering the full student immigration lifecycle — from arrival to post-graduation — based on Act No. 326/1999 Coll. and official MVČR sources. |
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-User Question
+User Question + PDF Upload
       │
       ▼
 ┌─────────────────────────────┐
-│   PII Scrubber (GDPR)       │  Regex-only, ~0ms — strips PII before any API call
-│   + Language Detection      │  11-language heuristic, ~0ms
+│   PII Scrubber + Lang Det   │  Strips PII & detects input language
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│   Query Preparation         │  First message → 0 LLM calls (original question only)
-│                             │  Follow-up     → 1 LLM call (condense + 2 rephrasings)
+│   Supabase History Load     │  Retrieves last 20 messages for session_id
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│   Retrieval (3 layers)      │
-│   1. Semantic search (k=6)  │  Vector similarity across all query variants
-│   2. Keyword boost          │  Maps topic keywords → section_id metadata filter
-│   3. FAQ bridge             │  Section 11: Q&A pairs written as students ask them
+│   HYBRID RETRIEVAL (v9.1)   │
+│   1. BM25 (Keyword Match)   │  Runs in parallel to prevent
+│   2. ChromaDB (Semantic)    │  missing specific legal terms
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│   Confidence Guard          │  Zero docs found → OAMP fallback (never hallucinates)
+│   Gemini 2.5 Flash          │  Grounded in Legal Context + User PDF
 └─────────────┬───────────────┘
               │
               ▼
 ┌─────────────────────────────┐
-│   Gemini 2.5 Flash          │  1 LLM call — grounded strictly in retrieved context
-│   + Language instruction    │  Injected at END of prompt to prevent language drift
+│   Supabase History Save     │  New user/AI message pair saved to cloud
 └─────────────┬───────────────┘
               │
               ▼
@@ -94,9 +88,9 @@ User Question
 
 ---
 
-## 📚 Knowledge Base Coverage
+## 📚 Knowledge Base
 
-The knowledge base (`Ver. 2026.2`) covers **11 structured sections** based on official sources from the Ministry of the Interior (MVČR), Act No. 326/1999 Coll., `frs.gov.cz`, and `ipc.gov.cz`.
+Version `2026.2` — covers **11 structured sections** sourced from the Ministry of the Interior (MVČR), Act No. 326/1999 Coll., `frs.gov.cz`, and `ipc.gov.cz`.
 
 | Section | Topic |
 |---|---|
@@ -118,14 +112,17 @@ The knowledge base (`Ver. 2026.2`) covers **11 structured sections** based on of
 
 | Layer | Technology |
 |---|---|
-| **LLM** | Google Gemini 2.5 Flash |
-| **Embeddings** | `gemini-embedding-001` (task: `retrieval_query` / `retrieval_document`) |
-| **Vector Database** | ChromaDB (local persistence at `/tmp/vector_db`) |
-| **RAG Framework** | LangChain 0.2+ |
-| **Frontend** | Streamlit |
-| **Deployment** | Streamlit Cloud |
-| **PII Layer** | Custom regex scrubber (`pii_scrubber.py`) |
-| **Language Detection** | Custom heuristic word-list (`lang_detect.py`) |
+| LLM | Google Gemini 2.5 Flash |
+| Embeddings | `gemini-embedding-001` (`retrieval_query` / `retrieval_document`) |
+| Vector Database | ChromaDB (local persistence at `/tmp/vector_db`) |
+| Cloud Database | Supabase (PostgreSQL) — chat history |
+| Hybrid Search | LangChain BM25 Retriever + ChromaDB |
+| RAG Framework | LangChain 0.2+ |
+| Frontend | Streamlit |
+| Deployment | Streamlit Cloud |
+| PII Layer | Custom regex scrubber (`pii_scrubber.py`) |
+| Language Detection | Custom heuristic word-list (`lang_detect.py`) |
+| PDF Parsing | PyPDF |
 
 ---
 
@@ -133,14 +130,15 @@ The knowledge base (`Ver. 2026.2`) covers **11 structured sections** based on of
 
 ```
 ImmigraSmart/
-├── app.py                          # Streamlit frontend (UI + session management)
+├── app.py                                    # Streamlit frontend — UI & session UUID logic
 ├── src/
-│   ├── rag_engine.py               # Full RAG pipeline — ImmigraSmartChat class
-│   ├── ingest.py                   # Document ingestion, chunking, vector DB build
-│   ├── pii_scrubber.py             # GDPR layer — strips PII before LLM calls
-│   └── lang_detect.py              # Language detection + response instruction
+│   ├── rag_engine.py                         # Hybrid RAG pipeline — ImmigraSmartChat class
+│   ├── database.py                           # Supabase connector — history load/save
+│   ├── ingest.py                             # Document ingestion, chunking, vector DB build
+│   ├── pii_scrubber.py                       # GDPR layer — strips PII before LLM calls
+│   └── lang_detect.py                        # Language detection + response instruction
 ├── data/
-│   └── immigrasmart_knowledge_base.txt   # Structured knowledge base (11 sections)
+│   └── immigrasmart_knowledge_base.txt       # Structured knowledge base (11 sections)
 ├── requirements.txt
 ├── .env.example
 └── README.md
@@ -154,6 +152,7 @@ ImmigraSmart/
 
 - Python 3.10+
 - A [Google AI Studio](https://aistudio.google.com) API key (free tier works)
+- A [Supabase](https://supabase.com) project (free tier works)
 
 ### Installation
 
@@ -172,13 +171,31 @@ pip install -r requirements.txt
 
 # 4. Configure environment variables
 cp .env.example .env
-# Edit .env and set your GOOGLE_API_KEY
+# Edit .env with your keys (see below)
 ```
 
 ### Environment Variables
 
 ```env
 GOOGLE_API_KEY=your_google_api_key_here
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_KEY=your_supabase_anon_public_key
+```
+
+### Supabase Setup
+
+Run this SQL in your Supabase SQL editor to create the chat history table:
+
+```sql
+CREATE TABLE chat_history (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  session_id TEXT NOT NULL,
+  role TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_session_id ON chat_history(session_id);
 ```
 
 ### Run Locally
@@ -202,8 +219,10 @@ langchain-community
 langchain-core
 langchain-text-splitters
 chromadb
+supabase
 python-dotenv
 pypdf
+rank-bm25
 ```
 
 ---
@@ -213,6 +232,7 @@ pypdf
 ImmigraSmart was designed with privacy-by-design principles (GDPR Article 25).
 
 **PII Scrubbing** — `pii_scrubber.py` runs before every LLM API call and strips:
+
 - Czech/Slovak passport numbers (`AB1234567` format)
 - Czech personal ID numbers / rodné číslo (`YYMMDD/XXXX` with separator)
 - IBAN / bank account numbers
@@ -220,15 +240,17 @@ ImmigraSmart was designed with privacy-by-design principles (GDPR Article 25).
 - Phone numbers (`+420` and international `+XX` formats)
 - Dates of birth (`DD.MM.YYYY`, `YYYY-MM-DD`)
 
-Personal data is **never sent to the Gemini API**. The scrubber returns a `ScrubResult` dataclass indicating which entity types were found, allowing the UI to display a privacy notice to the user.
+Personal data is **never sent to the Gemini API**. The scrubber returns a `ScrubResult` dataclass indicating which entity types were found, allowing the UI to display a privacy badge to the user.
+
+**Data Sovereignty** — All chat logs are stored in a secure Supabase instance. Users can request data deletion by providing their `session_id`, ensuring compliance with the GDPR Right to Erasure (Article 17).
 
 ---
 
 ## 🌍 Supported Languages
 
-ImmigraSmart detects the language of each message and responds in kind.
+ImmigraSmart detects the language of each message and responds in kind. The language instruction is injected at the **end** of the system prompt — after the English legal context — to prevent language drift, a known failure mode where the model defaults to English after reading large amounts of English text.
 
-| Language | Code | Detected via |
+| Language | Code | Detection method |
 |---|---|---|
 | Czech | `cs` | Heuristic word list |
 | Slovak | `sk` | Heuristic word list |
@@ -242,33 +264,35 @@ ImmigraSmart detects the language of each message and responds in kind.
 | German | `de` | Heuristic word list |
 | French | `fr` | Heuristic word list |
 
-The language instruction is injected at the **end** of the system prompt (after the English legal context) to prevent language drift — a known failure mode where the model defaults to English after reading large amounts of English text.
-
 ---
 
 ## 🐛 Known Issues Resolved
 
 | Issue | Root Cause | Fix Applied |
 |---|---|---|
-| "Can I work?" returned fallback | Confidence check ran before keyword boost — colloquial questions scored below threshold | Moved confidence check to post-retrieval; fallback only triggers on empty results |
-| Spanish/Ukrainian responses came back in English | Language instruction placed before legal context — English text overrode it | Language instruction moved to end of prompt with imperative phrasing |
-| "Foreign Police" → `[PERSON_NAME]` | PII name regex matched any two capitalised words, destroying legal terms | Name regex removed; only explicit document formats matched |
-| Chat messages showed black background on mobile | `[data-testid="stSidebar"] * { color: white }` wildcard bled into main content | Wildcard replaced with scoped class selectors; all text colors explicit with `-webkit-text-fill-color` |
-| Answers took 8–14 seconds | 3 sequential LLM calls per message (condense + rephrase + answer) | Combined condense+rephrase into 1 call; first messages skip it entirely (0 calls) |
-| `No module named 'pii_scrubber'` | Python path not set when importing from `src/` | `sys.path.insert(0, str(pathlib.Path(__file__).parent))` added to `rag_engine.py` |
+| "Can I work?" returned generic fallback | Confidence check ran before keyword boost — short questions scored below threshold | Moved confidence check to post-retrieval; fallback only triggers on empty results |
+| Czech/Spanish responses came back in English | `chain.invoke()` received the English rewrite (`variants[0]`) instead of the user's original message | Changed final chain invocation to use `clean_input`; variants are now retrieval-only |
+| Language instruction ignored after English context | Instruction injected before legal context — English text volume overrode it | Instruction moved to end of system prompt with imperative phrasing |
+| "Foreign Police" → `[PERSON_NAME]` | Name regex matched any two capitalised words, destroying legal terms | Name regex removed; only exact document formats matched |
+| Chat messages showed black background on mobile | `[data-testid="stSidebar"] * { color: white }` wildcard bled into main content | Wildcard replaced with scoped selectors; all text colors made explicit |
+| Answers took 8–14 seconds | 3 sequential LLM calls per message (condense + rephrase + answer) | Combined into 1 call; first messages skip it entirely (0 LLM calls) |
+| `No module named 'pii_scrubber'` | Python path not set when importing from `src/` | `sys.path.insert(0, ...)` added to `rag_engine.py` |
+| Refreshing page wiped conversation | State stored only in Streamlit `session_state` (in-memory) | Migrated to Supabase; history persists across sessions via UUID |
+| Legal terms like "VZP" missed by semantic search | Embedding similarity alone fails on abbreviations and proper nouns | BM25 keyword retriever runs in parallel, merged with semantic results |
 
 ---
 
 ## 🔮 Roadmap
 
-- [ ] **Hybrid Search** — BM25 keyword + semantic (replaces keyword boost with proper solution)
-- [ ] **RAGAS Evaluation Pipeline** — automated quality scoring on 30 test questions
-- [ ] **PDF Upload** — let students upload their own permit documents and ask questions
-- [ ] **Supabase Auth** — persistent chat history + GDPR Right to Erasure per user
-- [ ] **Vertex AI Context Caching** — cache the legal corpus, reduce LLM cost ~80%
-- [ ] **Automated KB Updates** — weekly GitHub Action that checks `frs.gov.cz` for changes
-- [ ] **FastAPI Backend** — async endpoints, enables WhatsApp/Telegram bot on same engine
-- [ ] **OAMP Appointment Checker** — scrape available appointment slots, notify users
+- [x] Hybrid Search — BM25 keyword + semantic retrieval
+- [x] Persistent Cloud History — Supabase integration with UUID sessions
+- [x] PDF Document Upload — contextual analysis of student documents
+- [ ] Supabase Auth — proper user accounts with email/password
+- [ ] RAGAS Evaluation Pipeline — automated quality scoring on 30 test questions
+- [ ] Vertex AI Context Caching — cache the legal corpus, reduce LLM cost ~80%
+- [ ] Automated KB Updates — weekly GitHub Action that checks `frs.gov.cz` for changes
+- [ ] FastAPI Backend — async endpoints, enables WhatsApp/Telegram bot on same engine
+- [ ] OAMP Appointment Checker — scrape available appointment slots, notify users
 
 ---
 
@@ -278,7 +302,7 @@ ImmigraSmart AI provides **general informational guidance only** and does not co
 
 - **OAMP official portal:** [frs.gov.cz](https://frs.gov.cz)
 - **Info portal for foreigners:** [ipc.gov.cz](https://ipc.gov.cz)
-- **OAMP Info Line:** +420 974 801 801
+- **OAMP Info Line:** +420 974 801 801 (Mon–Thu 08:00–16:00, Fri 08:00–12:00)
 - **Free legal aid (SIMI):** [migrace.com](https://migrace.com)
 - **Free legal aid (OPU):** [opu.cz](https://opu.cz)
 
@@ -302,7 +326,7 @@ Contributions are welcome — especially from Czech immigration lawyers, interna
 
 Built this because I needed it. Sharing it because others do too.
 
-[![LinkedIn](https://www.linkedin.com/in/oskar-david-vanegas-juarez-59301b322/?locale=en)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?logo=linkedin)](https://www.linkedin.com/in/oskar-david-vanegas-juarez-59301b322/?locale=en)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?logo=github)](https://github.com/vanos0600)
 
 ---
