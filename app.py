@@ -1,9 +1,10 @@
 import sys
 import os
 import streamlit as st
-
+from pypdf import PdfReader
+import streamlit.components.v1 as components  # <-- NUEVO: Para inyectar JavaScript
 # ─────────────────────────────────────────────────────────────────────────────
-# 1. PAGE CONFIGURATION (¡Debe ser siempre lo primero!)
+# 1. PAGE CONFIGURATION
 # ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="ImmigraSmart — Czech Republic",
@@ -13,7 +14,7 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. PATH SETUP (Conectamos con la carpeta src)
+# 2. PATH SETUP (Connect to src folder)
 # ─────────────────────────────────────────────────────────────────────────────
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = os.path.join(current_dir, "src")
@@ -52,6 +53,8 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 if "pending_input" not in st.session_state:
     st.session_state.pending_input = None
+if "uploaded_doc_text" not in st.session_state:
+    st.session_state.uploaded_doc_text = None
 
 # INYECCIÓN DE SECRETS PARA LA NUBE:
 try:
@@ -63,15 +66,12 @@ except Exception:
 # Intentamos cargar tu motor.
 if "chat_engine" not in st.session_state:
     try:
-        # Si la base de datos NO existe, la construimos automáticamente
         if not os.path.exists("/tmp/vector_db"):
             with st.spinner("⏳ Cloud Deployment Detected: Building knowledge base for the first time. This will take a minute..."):
-                # Importamos tu script de ingestión y lo corremos
                 from ingest import main as run_ingestion
                 run_ingestion(force=True)
                 st.toast("✅ Knowledge Base built successfully!")
                 
-        # Una vez que estamos seguros de que existe, cargamos el cerebro
         from rag_engine import ImmigraSmartChat
         st.session_state.chat_engine = ImmigraSmartChat()
         
@@ -90,8 +90,30 @@ with st.sidebar:
     
     if st.button("➕ New Conversation", use_container_width=True, type="primary"):
         st.session_state.messages = []
-        st.session_state.chat_engine.reset() # Limpiamos la memoria del RAG
+        st.session_state.uploaded_doc_text = None # Limpiamos el PDF si hay nueva charla
+        st.session_state.chat_engine.reset() 
         st.rerun()
+
+    st.divider()
+    
+    # --- NUEVO: CARGA DE DOCUMENTOS (PDF) ---
+    st.subheader("📄 Document Analysis")
+    st.caption("Upload a lease or insurance contract")
+    uploaded_file = st.file_uploader("Upload PDF", type=["pdf"], label_visibility="collapsed")
+    
+    if uploaded_file is not None:
+        try:
+            reader = PdfReader(uploaded_file)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text() + "\n"
+            st.session_state.uploaded_doc_text = text
+            st.success("✅ Document loaded into AI memory!")
+        except Exception as e:
+            st.error("Error reading PDF. Please try another file.")
+            st.session_state.uploaded_doc_text = None
+    else:
+        st.session_state.uploaded_doc_text = None 
 
     st.divider()
     
@@ -184,8 +206,11 @@ if user_query:
     with st.chat_message("assistant", avatar="🏛️"):
         with st.spinner("Consulting Czech immigration guidelines..."):
             try:
-                # LLAMADA AL CEREBRO (rag_engine.py maneja el idioma, PII y la búsqueda)
-                answer, meta = st.session_state.chat_engine.ask(user_query)
+                # LLAMADA AL CEREBRO (Pasamos user_query Y el documento subido)
+                answer, meta = st.session_state.chat_engine.ask(
+                    user_query,
+                    user_document=st.session_state.uploaded_doc_text
+                )
 
                 st.markdown(answer)
                 
@@ -201,3 +226,32 @@ if user_query:
                 st.info("Check your terminal for detailed error logs.")
                 with st.expander("Technical details for developers"):
                     st.code(str(e))
+
+                    # ─────────────────────────────────────────────────────────────────────────────
+# 10. AUTO-SCROLL MAGIC (UX IMPROVEMENT)
+# ─────────────────────────────────────────────────────────────────────────────
+# Este pequeño script de JS fuerza a la pantalla a bajar suavemente 
+# hasta el último mensaje después de cada recarga.
+# ─────────────────────────────────────────────────────────────────────────────
+# 10. AUTO-SCROLL MAGIC (UX IMPROVEMENT - TIMEOUT VERSION)
+# ─────────────────────────────────────────────────────────────────────────────
+# Este script espera a que la página termine de renderizarse y luego fuerza el scroll.
+components.html(
+    """
+    <script>
+        // Función para bajar la pantalla
+        const scrollToBottom = () => {
+            // Buscamos los contenedores principales que usa Streamlit
+            const containers = window.parent.document.querySelectorAll('.main, [data-testid="stMain"], [data-testid="stAppViewContainer"]');
+            
+            containers.forEach(container => {
+                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+            });
+        };
+
+        // Le damos 500 milisegundos de ventaja a Streamlit para que termine de cargar el texto
+        setTimeout(scrollToBottom, 500);
+    </script>
+    """,
+    height=0
+)

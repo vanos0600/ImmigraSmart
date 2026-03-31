@@ -16,17 +16,19 @@ FIXES vs v1:
   BUG 1 — Score threshold was >= 2, causing short single-sentence queries
     (e.g. "Potřebuji vízum", "Jak mohu pracovat?") to score only 1 match
     and silently fall back to English.
-    FIX: Threshold lowered to >= 1. Every hint word in _HINTS is language-
-    specific enough that a single match is a reliable signal. Words like
-    "potřebuji", "jsem", "vízum" simply do not appear in other languages.
+    FIX: Threshold lowered to >= 1. 
+  BUG 2 — Language tie-breaker bug. Words like "visa" exist in both Spanish 
+    and English lists. When scores tied, it defaulted to the first in the dictionary.
+    FIX: If there's a tie for the top score and 'en' is one of the candidates, 
+    'en' wins by default.
 """
 
 import re
 
-# ── Heuristic word lists (top 15 common words per language) ──────────────────
+# ── Heuristic word lists (top common words per language) ──────────────────
 
 _HINTS: dict[str, list[str]] = {
-   "cs": ["jsem", "mám", "mam", "potřebuji", "potrebuji", "jak", "kdy", "kde", "vízum", "vizum", "povolení", "povoleni", "pobyt", "přijet", "prosím", "prosim", "mohu", "musím", "student", "cizinec", "ahoj", "dotaz", "dobrý"],
+    "cs": ["jsem", "mám", "mam", "potřebuji", "potrebuji", "jak", "kdy", "kde", "vízum", "vizum", "povolení", "povoleni", "pobyt", "přijet", "prosím", "prosim", "mohu", "musím", "student", "cizinec", "ahoj", "dotaz", "dobrý"],
     "sk": ["som", "mám", "potrebujem", "ako", "kedy", "kde", "vízum", "povolenie", "pobyt", "prísť", "prosím", "môžem", "musím", "študent", "cudzinec"],
     "es": ["tengo", "necesito", "cómo", "cuándo", "dónde", "visa", "permiso", "residencia", "llegar", "por favor", "puedo", "debo", "estudiante", "extranjero", "quiero"],
     "ar": ["أحتاج", "كيف", "متى", "أين", "تأشيرة", "إقامة", "وصول", "طالب", "أجنبي", "يمكنني", "يجب", "أريد", "لدي", "منح"],
@@ -36,7 +38,8 @@ _HINTS: dict[str, list[str]] = {
     "zh": ["我", "需要", "如何", "何时", "在哪里", "签证", "许可", "居留", "抵达", "请", "可以", "必须", "学生", "外国人"],
     "de": ["ich", "brauche", "wie", "wann", "wo", "visum", "aufenthaltserlaubnis", "aufenthalt", "ankommen", "bitte", "kann", "muss", "student", "ausländer"],
     "fr": ["j'ai", "besoin", "comment", "quand", "où", "visa", "permis", "séjour", "arriver", "s'il vous plaît", "peux", "dois", "étudiant", "étranger"],
-    "en": ["i", "need", "how", "when", "where", "visa", "permit", "residence", "arrive", "please", "can", "must", "student", "foreigner", "apply"],
+    # Expanded English list to catch more queries
+    "en": ["i", "need", "how", "when", "where", "visa", "permit", "residence", "arrive", "please", "can", "must", "student", "foreigner", "apply", "what", "about", "file", "requirements"],
 }
 
 _LANG_NAMES: dict[str, str] = {
@@ -58,9 +61,6 @@ def detect_language(text: str) -> str:
     """
     Returns a BCP-47 language code (e.g. 'en', 'es', 'cs').
     Defaults to 'en' when uncertain.
-
-    FIX: Threshold lowered from >= 2 to >= 1.
-    Each hint word is language-exclusive, so a single match is sufficient.
     """
     lower = text.lower()
     scores: dict[str, int] = {}
@@ -73,12 +73,18 @@ def detect_language(text: str) -> str:
     if not scores:
         return "en"
 
-    best_lang = max(scores, key=lambda k: scores[k])
-    best_score = scores[best_lang]
+    # Encontrar la puntuación más alta
+    best_score = max(scores.values())
+    
+    # Encontrar TODOS los idiomas que obtuvieron esa puntuación (para manejar empates)
+    best_langs = [lang for lang, score in scores.items() if score == best_score]
 
-    # FIX BUG 1: Was `>= 2`. Now `>= 1` — a single language-exclusive hint
-    # word is enough to confidently detect the language. Short questions like
-    # "Potřebuji vízum" (1 Czech word) no longer fall back to English.
+    # REGLA DE DESEMPATE: Si hay un empate y el inglés ('en') está en la lista, el inglés gana.
+    if "en" in best_langs:
+        best_lang = "en"
+    else:
+        best_lang = best_langs[0]
+
     return best_lang if best_score >= 1 else "en"
 
 
