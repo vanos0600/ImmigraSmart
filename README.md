@@ -15,7 +15,7 @@
 
 <br/>
 
-> Built by a student from Nicaragua living in Prague — for every international student who has ever felt lost in the Czech immigration system.
+> Built by 2  students from Nicaragua and Bangladesh living in Prague — for every international student who has ever felt lost in the Czech immigration system.
 
 <br/>
 
@@ -320,9 +320,10 @@ Contributions are welcome — especially from Czech immigration lawyers, interna
 
 ---
 
-## 👤 Author
+## 👤 Authors
 
-**Oskar Vanegas** — Student, AI Engineer, Nicaraguan in Prague 🇳🇮 → 🇨🇿
+**Oskar Vanegas** — Student, AI Engineer, Nicaraguan in Prague 
+**Ayon Das** - Student at Charles University, Bangladeshi in Prague
 
 Built this because I needed it. Sharing it because others do too.
 
