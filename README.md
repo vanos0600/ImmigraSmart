@@ -334,8 +334,7 @@ Built this because I needed it. Sharing it because others do too.
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
+All rights reserved. No license is granted to use, modify, or distribute this software without explicit permission.
 ---
 
 <div align="center">
